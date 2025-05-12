@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-arquitectura
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: db_arquitectura
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - red-app
+
+networks:
+  red-app:
