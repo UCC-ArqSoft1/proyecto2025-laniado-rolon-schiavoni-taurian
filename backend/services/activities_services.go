@@ -29,6 +29,21 @@ func GetAllActivities() (dto.ActivitiesDto, e.ApiError) {
 	return activitiesDto, nil
 }
 
+func GetActivityByID(id int) (dto.ActivityDto, e.ApiError) {
+	var activity model.ActivityModel = activityClient.GetActivityByID(id)
+	var activityDto dto.ActivityDto
+	activityDto.ID = activity.ID
+	activityDto.Category = activity.Category
+	activityDto.Name = activity.Name
+	activityDto.Description = activity.Description
+	activityDto.ProfesorName = activity.ProfesorName
+	activityDto.Quotas = activity.Quotas
+	activityDto.Schedules = activity.Schedule
+	//activityDto.InscriptionsActivity = activity.InscriptionsActivity
+	activityDto.Active = activity.Active
+	return activityDto, nil
+}
+
 //func CreateActivity(activity domain.Activity) domain.Activity {
 
 /*
