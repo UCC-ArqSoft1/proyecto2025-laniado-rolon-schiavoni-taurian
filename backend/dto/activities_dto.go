@@ -9,7 +9,8 @@ type ActivityDto struct {
 	Quotas       int    `json:"quotas"` //Cupos
 	Schedules    string `json:"schedules"`
 	//InscriptionsActivity Inscriptions `json:"inscriptions"` //FK
-	Active bool `json:"active"`
+	Active bool   `json:"active"`
+	Photo  string `json:"photo"`
 }
 
 type ActivitiesDto []ActivityDto

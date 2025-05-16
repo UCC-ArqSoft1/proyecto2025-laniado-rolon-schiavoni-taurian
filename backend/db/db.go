@@ -1,10 +1,10 @@
 package db
 
 import (
+	activityClient "backend/clients/activity"
 	"backend/model"
 
 	log "github.com/sirupsen/logrus"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -23,15 +23,15 @@ func init() {
 	} else {
 		log.Info("Connection Established")
 	}
-	//services.Db = DB
+	activityClient.Db = DB
 
 }
 
 func StartDbEngine() {
 	// Migrating all classes model.
 	DB.AutoMigrate(&model.ActivityModel{})
-	//DB.AutoMigrate(&model.UserModel{})
-	//DB.AutoMigrate(&model.InscriptionModel{})
+	DB.AutoMigrate(&model.UserModel{})
+	DB.AutoMigrate(&model.InscriptionModel{})
 
 	log.Info("Finishing Migration Database Tables")
 	testgorm()

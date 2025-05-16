@@ -6,5 +6,6 @@ type UserModel struct {
 	PasswordHash     string       `gorm:"password"`
 	FirstName        string       `gorm:"type:varchar(100);not null"`
 	LastName         string       `gorm:"type:varchar(100);not null"`
-	InscriptionsUser Inscriptions `gorm:"foreignKey:UsuarioID"` //FK
+	InscriptionsUser Inscriptions `gorm:"foreignKey:UserID"` //FK
+	IsAdmin          bool         `gorm:"default:false"`     //Admin
 }
