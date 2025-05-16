@@ -1,12 +1,40 @@
 package services
 
 import (
-	"backend/domain"
+	activityClient "backend/clients/activity"
+	"backend/dto"
+	"backend/model"
+	e "backend/utils/errors"
 )
 
+func GetAllActivities() (dto.ActivitiesDto, e.ApiError) {
+
+	var activities model.Activities = activityClient.GetAllActivities()
+	var activitiesDto dto.ActivitiesDto
+	for _, activity := range activities {
+		activityDto := dto.ActivityDto{
+			ID:           activity.ID,
+			Category:     activity.Category,
+			Name:         activity.Name,
+			Description:  activity.Description,
+			ProfesorName: activity.ProfesorName,
+			Quotas:       activity.Quotas,
+			Schedules:    activity.Schedule,
+			//InscriptionsActivity: activity.InscriptionsActivity,
+			Active: activity.Active,
+		}
+		activitiesDto = append(activitiesDto, activityDto)
+	}
+
+	return activitiesDto, nil
+}
+
+//func CreateActivity(activity domain.Activity) domain.Activity {
+
+/*
 func GetActivityByID(id int) domain.Activity {
-	ActivityGet := hardcodeActivity(id)
-	return ActivityGet
+	//ActivityGet := hardcodeActivity(id)
+	return domain.Activity{}
 }
 
 func GetAllActivitiesByCategoryID(id int) []domain.Activity {
@@ -17,12 +45,13 @@ func GetAllActivitiesByCategoryID(id int) []domain.Activity {
 func hardcodeActivitiesByCategoryID(id int) []domain.Activity {
 	activities := []domain.Activity{}
 	if id == 1 {
-		activities = append(activities, hardcodeActivity(0))
-		activities = append(activities, hardcodeActivity(1))
+		//activities = append(activities, hardcodeActivity(0))
+		//activities = append(activities, hardcodeActivity(1))
 	}
 	return activities
 }
 
+/*
 func hardcodeActivity(id int) domain.Activity {
 	Activity := domain.Activity{}
 	if id == 0 {
@@ -68,3 +97,4 @@ func hardcodeActivity(id int) domain.Activity {
 	}
 	return Activity
 }
+*/

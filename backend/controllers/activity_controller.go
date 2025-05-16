@@ -1,14 +1,16 @@
 package controllers
 
 import (
+	//importo modulo propio
 	"backend/services" //importo modulo propio
-	_ "fmt"            //importo libreria externa
-	"strconv"
+	//importo modulo propio
+	_ "fmt" //importo libreria externa
+	_ "strconv"
 
 	"github.com/gin-gonic/gin" //importo un link
 )
 
-func GetActivityByID(ctx *gin.Context) {
+/* func GetActivityByID(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	ctx.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
@@ -21,18 +23,16 @@ func GetActivityByID(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, activity) //devuelvo un JSON
-}
+}*/
 
-func GetAllActivitiesByCategoryID(ctx *gin.Context) {
+func GetAllActivities(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	ctx.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
 
-	categoryIDString := ctx.Param("id")                                //me devuelve algo que quiero de la url, le debo poner el mismo nombre
-	categoryIDInt, err := strconv.Atoi(categoryIDString)               //convierto el dato en int, el err representa el error que devuelve el cambio de stoi, si no funciona, es una variable
-	activities := services.GetAllActivitiesByCategoryID(categoryIDInt) //le paso el id de la url
-	if err != nil {
-		ctx.String(400, "Id invalido")
+	activities, err := services.GetAllActivities() //le paso el id de la url
+	if err == nil {
+		ctx.String(400, "No hay actividades")
 		return
 	}
 	ctx.JSON(200, activities) //devuelvo un JSON
