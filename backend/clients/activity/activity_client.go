@@ -20,14 +20,14 @@ var Db *gorm.DB
 	return activity
 }*/
 
-func GetAllActivities() model.Activities {
+/*func GetAllActivities() model.Activities {
 	var activities model.Activities
 	Db.Find(&activities)
 
 	log.Debugf("Activities Found: %+v", activities)
 
 	return activities
-}
+}*/
 
 func GetActivityByID(id int) model.ActivityModel {
 	var activity model.ActivityModel
@@ -36,4 +36,29 @@ func GetActivityByID(id int) model.ActivityModel {
 	log.Debugf("Activity Found: %+v", activity)
 
 	return activity
+}
+
+func GetFilteredActivities(category string, name string, description string, schedule string) model.Activities {
+	var activities model.Activities
+
+	query := Db // comenzamos con el DB base
+
+	if category != "" {
+		query = query.Where("category = ?", category)
+	}
+	if name != "" {
+		query = query.Where("name LIKE ?", "%"+name+"%")
+	}
+	if description != "" {
+		query = query.Where("description LIKE ?", "%"+description+"%")
+	}
+	if schedule != "" {
+		query = query.Where("schedule LIKE ?", "%"+schedule+"%")
+	}
+
+	query.Find(&activities)
+
+	log.Debugf("Filtered Activities Found: %+v", activities)
+
+	return activities
 }

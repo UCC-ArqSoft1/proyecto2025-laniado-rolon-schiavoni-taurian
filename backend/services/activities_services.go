@@ -7,7 +7,7 @@ import (
 	e "backend/utils/errors"
 )
 
-func GetAllActivities() (dto.ActivitiesDto, e.ApiError) {
+/*func GetAllActivities() (dto.ActivitiesDto, e.ApiError) {
 
 	var activities model.Activities = activityClient.GetAllActivities()
 	var activitiesDto dto.ActivitiesDto
@@ -27,7 +27,7 @@ func GetAllActivities() (dto.ActivitiesDto, e.ApiError) {
 	}
 
 	return activitiesDto, nil
-}
+}*/
 
 func GetActivityByID(id int) (dto.ActivityDto, e.ApiError) {
 	var activity model.ActivityModel = activityClient.GetActivityByID(id)
@@ -42,6 +42,27 @@ func GetActivityByID(id int) (dto.ActivityDto, e.ApiError) {
 	//activityDto.InscriptionsActivity = activity.InscriptionsActivity
 	activityDto.Active = activity.Active
 	return activityDto, nil
+}
+
+func GetFilteredActivities(category string, name string, description string, schedule string) (dto.ActivitiesDto, e.ApiError) {
+	var activities model.Activities = activityClient.GetFilteredActivities(category, name, description, schedule)
+	var activitiesDto dto.ActivitiesDto
+	for _, activity := range activities {
+		activityDto := dto.ActivityDto{
+			ID:           activity.ID,
+			Category:     activity.Category,
+			Name:         activity.Name,
+			Description:  activity.Description,
+			ProfesorName: activity.ProfesorName,
+			Quotas:       activity.Quotas,
+			Schedules:    activity.Schedule,
+			//InscriptionsActivity: activity.InscriptionsActivity,
+			Active: activity.Active,
+		}
+		activitiesDto = append(activitiesDto, activityDto)
+	}
+
+	return activitiesDto, nil
 }
 
 //func CreateActivity(activity domain.Activity) domain.Activity {
