@@ -1,11 +1,11 @@
 package model
 
 type InscriptionModel struct {
-	ID              int `gorm:"primaryKey"` //PK
+	ID              int       `gorm:"primaryKey"`        //PK
+	User            UserModel `gorm:"foreignKey:UserID"` //FK
 	UserID          int
-	User            UserModel `gorm:"foreignKey:UserID"`  //FK
-	DateInscription string    `gorm:"type:date;not null"` //Date of inscription
-	Active          bool      `gorm:"default:true"`       //Active status
+	DateInscription string `gorm:"type:date;not null"` //Date of inscription
+	Active          bool   `gorm:"default:true"`       //Active status
 
 	Activity   ActivityModel `gorm:"foreignKey:ActivityID"` //FK
 	ActivityID int

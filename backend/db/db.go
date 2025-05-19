@@ -2,6 +2,7 @@ package db
 
 import (
 	activityClient "backend/clients/activity"
+	inscriptionClient "backend/clients/inscription"
 	userCLient "backend/clients/user"
 	"backend/model"
 
@@ -26,6 +27,7 @@ func init() {
 	}
 	activityClient.Db = DB
 	userCLient.Db = DB
+	inscriptionClient.Db = DB
 
 	log.Info("Finishing Migration Database Tables")
 }

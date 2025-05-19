@@ -9,3 +9,8 @@ type InscriptionDto struct {
 }
 
 type Inscriptions []InscriptionDto
+
+type InscriptionRequest struct {
+	UserID     int `json:"usuario_id"`
+	ActivityID int `json:"actividad_id"`
+}
