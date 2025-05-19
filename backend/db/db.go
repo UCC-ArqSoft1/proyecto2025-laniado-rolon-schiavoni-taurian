@@ -2,6 +2,7 @@ package db
 
 import (
 	activityClient "backend/clients/activity"
+	userCLient "backend/clients/user"
 	"backend/model"
 
 	log "github.com/sirupsen/logrus"
@@ -24,7 +25,9 @@ func init() {
 		log.Info("Connection Established")
 	}
 	activityClient.Db = DB
+	userCLient.Db = DB
 
+	log.Info("Finishing Migration Database Tables")
 }
 
 func StartDbEngine() {
@@ -32,11 +35,4 @@ func StartDbEngine() {
 	DB.AutoMigrate(&model.ActivityModel{})
 	DB.AutoMigrate(&model.UserModel{})
 	DB.AutoMigrate(&model.InscriptionModel{})
-
-	log.Info("Finishing Migration Database Tables")
-	testgorm()
-}
-
-func testgorm() {
-
 }

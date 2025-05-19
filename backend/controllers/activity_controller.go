@@ -7,7 +7,6 @@ import (
 
 	//importo modulo propio
 	_ "fmt" //importo libreria externa
-	_ "strconv"
 
 	"github.com/gin-gonic/gin" //importo un link
 )
