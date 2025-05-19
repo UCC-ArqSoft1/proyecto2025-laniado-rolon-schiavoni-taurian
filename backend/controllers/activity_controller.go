@@ -12,21 +12,6 @@ import (
 	"github.com/gin-gonic/gin" //importo un link
 )
 
-/*
-	func GetAllActivities(ctx *gin.Context) {
-		ctx.Header("Access-Control-Allow-Origin", "*")
-		ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		ctx.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
-
-		activities, err := services.GetAllActivities() //le paso el id de la url
-		if err != nil {
-			ctx.String(400, "No hay actividades")
-			return
-		}
-
-		ctx.JSON(200, activities) //devuelvo un JSON
-	}
-*/
 func GetActivityByID(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
