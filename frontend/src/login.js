@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 
 
 
@@ -14,8 +14,6 @@ const Login = () => {
     const [error, setError] = useState("")
     const navigate = useNavigate();
 
-
-
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
@@ -23,7 +21,7 @@ const Login = () => {
 
         //POST PARA ENVIAR LOS DATOS INGRESADOS EN EL INPUT
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://localhost:8080/users/login', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -36,8 +34,9 @@ const Login = () => {
             //Almacenar Token en una cookie
             const data = await response.json();
             document.cookie = `token=${data.token}; path=/; SameSite=Strict`;
+            localStorage.setItem("userID", data.user_id);
 
-            navigate("/GetUserActivities");
+            navigate("/activities");
             // navigate("/activities") para redirigir al usuario a la página de 
             // actividades después de hacer login correctamente. Funcion React Router (useNavigate) 
         } catch {

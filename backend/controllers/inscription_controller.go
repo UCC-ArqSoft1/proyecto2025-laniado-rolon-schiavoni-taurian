@@ -22,7 +22,7 @@ func Inscription(ctx *gin.Context) {
 	//llamo al servicio de inscription
 	err := services.Inscription(request.UserID, request.ActivityID)
 	if err != nil {
-		ctx.JSON(400, gin.H{"error": "Inscription failed"})
+		ctx.JSON(403, gin.H{"error": "Inscription failed"})
 		return
 	}
 

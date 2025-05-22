@@ -29,7 +29,7 @@ func Login(username string, password string) (int, string, string, error) {
 func GetUserByID(id int) (dto.UserDto, error) {
 	userModel, err := userCLient.GetUserByID(id)
 	if err != nil {
-		return dto.UserDto{}, fmt.Errorf("failed to get user by id: %w", err)
+		return dto.UserDto{}, err
 	}
 
 	var insDto dto.Inscriptions
@@ -55,7 +55,7 @@ func GetUserByID(id int) (dto.UserDto, error) {
 func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 	activityModel, err := userCLient.GetUserActivities(id)
 	if err != nil {
-		return dto.ActivitiesDto{}, fmt.Errorf("failed to get user activities: %w", err)
+		return dto.ActivitiesDto{}, err
 	}
 
 	var actDto dto.ActivitiesDto

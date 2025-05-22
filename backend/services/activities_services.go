@@ -4,11 +4,12 @@ import (
 	activityClient "backend/clients/activity"
 	"backend/dto"
 	"backend/model"
-	e "backend/utils/errors"
 )
 
-func GetActivityByID(id int) (dto.ActivityDto, e.ApiError) {
-	var activity model.ActivityModel = activityClient.GetActivityByID(id)
+func GetActivityByID(id int) (dto.ActivityDto, error) {
+	var activity model.ActivityModel
+	var err error
+	activity, err = activityClient.GetActivityByID(id)
 	var activityDto dto.ActivityDto
 	var insDto dto.Inscriptions
 	for _, ins := range activity.InscriptionsActivity {
@@ -29,12 +30,16 @@ func GetActivityByID(id int) (dto.ActivityDto, e.ApiError) {
 	activityDto.Schedules = activity.Schedule
 	activityDto.InscriptionsActivity = insDto
 	activityDto.Active = activity.Active
-	return activityDto, nil
+	return activityDto, err
 }
 
-func GetFilteredActivities(category string, name string, description string, schedule string) (dto.ActivitiesDto, e.ApiError) {
-	var activities model.Activities = activityClient.GetFilteredActivities(category, name, description, schedule)
+func GetFilteredActivities(category string, name string, description string, schedule string) (dto.ActivitiesDto, error) {
+	var activities model.Activities
 	var activitiesDto dto.ActivitiesDto
+	var err error
+
+	activities, err = activityClient.GetFilteredActivities(category, name, description, schedule)
+
 	for _, activity := range activities {
 		var insDto dto.Inscriptions
 		for _, ins := range activity.InscriptionsActivity {
@@ -58,5 +63,5 @@ func GetFilteredActivities(category string, name string, description string, sch
 		activitiesDto = append(activitiesDto, activityDto)
 	}
 
-	return activitiesDto, nil
+	return activitiesDto, err
 }

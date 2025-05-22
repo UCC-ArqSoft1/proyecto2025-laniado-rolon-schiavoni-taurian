@@ -20,17 +20,25 @@ var Db *gorm.DB
 	return activity
 }*/
 
-func GetActivityByID(id int) model.ActivityModel {
+func GetActivityByID(id int) (model.ActivityModel, error) {
 	var activity model.ActivityModel
+	var err error
 	Db.First(&activity, id)
+
+	if activity.ID == 0 {
+		log.Error("Activity not found")
+		err = gorm.ErrRecordNotFound
+		return activity, err
+	}
 
 	log.Debugf("Activity Found: %+v", activity)
 
-	return activity
+	return activity, err
 }
 
-func GetFilteredActivities(category string, name string, description string, schedule string) model.Activities {
+func GetFilteredActivities(category string, name string, description string, schedule string) (model.Activities, error) {
 	var activities model.Activities
+	var err error
 
 	query := Db // comenzamos con el DB base
 
@@ -49,7 +57,12 @@ func GetFilteredActivities(category string, name string, description string, sch
 
 	query.Find(&activities)
 
+	if len(activities) == 0 {
+		log.Error("No activities found")
+		err = gorm.ErrRecordNotFound
+		return activities, err
+	}
 	log.Debugf("Filtered Activities Found: %+v", activities)
 
-	return activities
+	return activities, err
 }

@@ -24,7 +24,7 @@ func GetActivityByID(ctx *gin.Context) {
 	}
 	activity, err1 := services.GetActivityByID(activityIDInt) //le paso el id de la url
 	if err1 != nil {
-		ctx.String(400, "Id invalido")
+		ctx.String(404, "Actividad no encontrada")
 		return
 	}
 	ctx.JSON(200, activity) //devuelvo un JSON
@@ -42,7 +42,7 @@ func GetFilteredActivities(ctx *gin.Context) {
 
 	activities, err := services.GetFilteredActivities(category, name, description, schedule)
 	if err != nil {
-		ctx.String(400, "No hay actividades")
+		ctx.String(404, "No hay actividades")
 		return
 	}
 

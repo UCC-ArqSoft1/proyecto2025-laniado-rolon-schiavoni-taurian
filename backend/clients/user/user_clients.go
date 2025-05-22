@@ -28,21 +28,28 @@ func GetUserByID(id int) (model.UserModel, error) {
 	if txn.Error != nil {
 		return model.UserModel{}, fmt.Errorf("failed to get user by id: %w", txn.Error)
 	}
+
+	if user.ID == 0 {
+		err := gorm.ErrRecordNotFound
+		return model.UserModel{}, err
+	}
+
 	return user, nil
 }
 
 func GetUserActivities(UserId int) ([]model.ActivityModel, error) {
 	var user model.UserModel
 
-	err := Db.Preload("InscriptionsUser.Activity").First(&user, UserId).Error
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user with activities: %w", err)
-	}
+	Db.Preload("InscriptionsUser.Activity").First(&user, UserId)
 
 	var activitiesArray model.Activities
 	for _, insc := range user.InscriptionsUser {
 		activitiesArray = append(activitiesArray, insc.Activity)
 	}
 
+	if len(activitiesArray) == 0 {
+		err := gorm.ErrRecordNotFound
+		return activitiesArray, err
+	}
 	return activitiesArray, nil
 }

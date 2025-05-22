@@ -1,23 +1,40 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 
-function Activities() { //siempre con mayuscula la funcion
 
-    const [activities, setActivities] = useState(null);
+const Activities = () => { //siempre con mayuscula la funcion
+
+    const [activities, setActivities] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8080/activites') //hago la peticion como postman, llamda http
-            .then((rest) => {  //cuando devuelva algo
-                return rest.json();
-            })
+        fetch('http://localhost:8080/activities') //hago la peticion como postman, llamda http
+            .then((rest) => rest.json())
 
             .then((data) => {
                 setActivities(data);
             })
-    })
+
+            .catch((err) => {
+                console.error("Error fetching activities:", err);
+            });
+
+    }, []);
 
     return (
         <div>
-            <h1>{activities && activities.name}</h1> verifico si hotel es null, si no lo es lo muestra
+            <h2>Actividades</h2>
+            <div>
+                {activities.map((activity) => (
+                    <div key={activity.id}>
+                        <h3>{activity.name}</h3>
+                        <p>{activity.description}</p>
+                        <button onClick={() => navigate(`/activities/${activity.id}`)}>
+                            Ver detalles
+                        </button>
+                    </div>
+                ))}
+            </div>
 
         </div>
     );
