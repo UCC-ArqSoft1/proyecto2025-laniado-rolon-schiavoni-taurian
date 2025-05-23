@@ -1,7 +1,7 @@
 package model
 
 type ActivityModel struct {
-	ID                   int          `gorm:"primaryKey"`                 //PK
+	ID                   int          `gorm:"primaryKey;autoIncrement"`   //PK
 	Category             string       `gorm:"type:varchar(100);not null"` //FK
 	Name                 string       `gorm:"type:varchar(100);not null"`
 	Description          string       `gorm:"type:varchar(350);not null"`

@@ -23,7 +23,7 @@ var Db *gorm.DB
 func GetActivityByID(id int) (model.ActivityModel, error) {
 	var activity model.ActivityModel
 	var err error
-	Db.First(&activity, id)
+	Db.Preload("InscriptionsActivity.Activity").First(&activity, id)
 
 	if activity.ID == 0 {
 		log.Error("Activity not found")

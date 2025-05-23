@@ -12,10 +12,13 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 	activity, err = activityClient.GetActivityByID(id)
 	var activityDto dto.ActivityDto
 	var insDto dto.Inscriptions
+
 	for _, ins := range activity.InscriptionsActivity {
 
 		insDto = append(insDto, dto.InscriptionDto{
 			ID:              ins.ID,
+			UserID:          ins.UserID,
+			ActivityID:      ins.ActivityID,
 			DateInscription: ins.DateInscription,
 			Active:          ins.Active,
 		})

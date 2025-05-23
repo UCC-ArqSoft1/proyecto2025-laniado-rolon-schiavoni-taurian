@@ -5,6 +5,7 @@ import (
 	inscriptionClient "backend/clients/inscription"
 	userCLient "backend/clients/user"
 	"backend/model"
+	"fmt"
 
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
@@ -34,7 +35,13 @@ func init() {
 
 func StartDbEngine() {
 	// Migrating all classes model.
-	DB.AutoMigrate(&model.ActivityModel{})
-	DB.AutoMigrate(&model.UserModel{})
-	DB.AutoMigrate(&model.InscriptionModel{})
+	if err := DB.AutoMigrate(&model.ActivityModel{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %v", err))
+	}
+	if err := DB.AutoMigrate(&model.UserModel{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %v", err))
+	}
+	if err := DB.AutoMigrate(&model.InscriptionModel{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %v", err))
+	}
 }
