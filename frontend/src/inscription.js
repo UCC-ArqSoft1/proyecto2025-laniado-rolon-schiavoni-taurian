@@ -36,7 +36,7 @@ const Inscription = () => {
                 .then(() => {
                     alert("Inscripción exitosa!");
                     setHasSubmitted(true);
-                    navigate("/activities"); // opcional: redirigir después
+                    navigate("/activities");
                 })
                 .catch((err) => {
                     console.error(err);

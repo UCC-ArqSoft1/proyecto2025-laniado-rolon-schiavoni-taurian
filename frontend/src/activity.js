@@ -25,6 +25,7 @@ const Activity = () => {
             <button onClick={() => navigate(`/users/inscription/${activity.id}`)}>Inscribirme</button>
         </div>
     );
+    
 };
 
 export default Activity;
