@@ -5,6 +5,7 @@ import './style_activities.css';
 const Activities = () => {
   const [activities, setActivities] = useState([]);
   const navigate = useNavigate();
+  const userID = localStorage.getItem("userID");
 
   useEffect(() => {
     fetch('http://localhost:8080/activities')
@@ -15,6 +16,14 @@ const Activities = () => {
 
   return (
     <div>
+      <button
+        className="my-activities-btn"
+        onClick={() => navigate(`/users/${userID}/activities`)}
+      >
+        My Activities
+      </button>
+
+    
       <header className="header">
         <h1>Actividades</h1>
         <p>Descubrí y participá de nuestras propuestas</p>
