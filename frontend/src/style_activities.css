@@ -26,7 +26,7 @@
   background: none !important;
   box-shadow: none !important;
   border: none !important;
-  margin-top: 400px;
+  margin-top: 0px;
 }
 
 /* Grid de actividades - CSS puro sin Bootstrap */
@@ -220,4 +220,42 @@
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+}
+
+
+.search-navbar {
+  display: flex;
+  flex-wrap: wrap;         
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 340px;
+  background: #fff7f2;     
+  padding: 1rem 0;         
+  border-radius: 8px;  
+}
+
+.search-select,
+.search-input {
+  min-width: 150px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.search-btn {
+  background: #db4f0e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  transition: background 0.2s;
+}
+
+.search-btn:hover {
+  background: #b93e09;
 }

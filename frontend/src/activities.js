@@ -4,8 +4,20 @@ import './style_activities.css';
 
 const Activities = () => {
   const [activities, setActivities] = useState([]);
+  const [searchKey, setSearchKey] = useState(""); 
+  const [searchValue, setSearchValue] = useState(""); 
   const navigate = useNavigate();
   const userID = localStorage.getItem("userID");
+
+    const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchKey && searchValue) {
+      fetch(`http://localhost:8080/activities?${searchKey}=${encodeURIComponent(searchValue)}`)
+        .then(res => res.json())
+        .then(data => setActivities(data))
+        .catch(err => console.error("Error fetching activities:", err));
+    }
+  };
 
   useEffect(() => {
     fetch('http://localhost:8080/activities')
@@ -28,6 +40,29 @@ const Activities = () => {
         <h1>Actividades</h1>
         <p>Descubrí y participá de nuestras propuestas</p>
       </header>
+      
+      <form className="search-navbar" onSubmit={handleSearch}>
+        <select
+          value={searchKey}
+          onChange={e => setSearchKey(e.target.value)}
+          className="search-select"
+          required
+        >
+          <option value="">Filtrar</option>
+          <option value="name">Nombre de la Actividad</option>
+          <option value="category">Categoría de la Actividad</option>
+          <option value="profesor_name">Profesor de la Actividad</option>
+        </select>
+        <input
+          type="text"
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+          className="search-input"
+          placeholder="Ingrese valor"
+          required
+        />
+        <button type="submit" className="search-btn">Buscar</button>
+      </form>
 
       <div className="container">
         <div className="row row-cols-1 row-cols-2 row-cols-3 g-6">

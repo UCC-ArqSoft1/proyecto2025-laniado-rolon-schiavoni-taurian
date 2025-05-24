@@ -16,7 +16,7 @@ function App() {
         <Route path="/activities/:id" element={<Activity />} />
         <Route path="/users/:id/activities" element={<MyActivities />} />
         <Route path="/users/inscription/:id" element={<Inscription />} />
-        <Route path="/myactivities/:id" element={<MyActivity />} />
+        <Route path="/activities/:id" element={<MyActivity />} />
       </Routes>
     </BrowserRouter>
   );
