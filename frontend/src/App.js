@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+import './style_app.css';
 import Activities from './activities';
 import Login from './login';
 import Activity from './activity';

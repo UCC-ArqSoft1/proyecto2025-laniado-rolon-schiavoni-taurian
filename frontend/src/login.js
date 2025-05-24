@@ -1,7 +1,7 @@
 // src/Login.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";  // Asegúrate de que este archivo CSS exista
+import "./style_login.css";  // Asegúrate de que este archivo CSS exista
 
 const Login = () => {
   const [rightPanelActive, setRightPanelActive] = useState(false);
