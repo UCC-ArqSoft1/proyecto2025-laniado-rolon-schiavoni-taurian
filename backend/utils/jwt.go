@@ -9,7 +9,7 @@ import (
 
 const (
 	// TokenExpirationTime is the expiration time for the JWT token
-	jwtDuration = 1 * time.Hour
+	jwtDuration = 1 * time.Minute
 	// TokenIssuer is the issuer of the JWT token
 	jwtSecret = "jwtSecret"
 )

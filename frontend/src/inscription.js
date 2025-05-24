@@ -19,9 +19,22 @@ const Inscription = () => {
             return;
         }
 
+        //busco el token de las cookies
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
+        if (!token) {
+            alert("Debe iniciar sesión para inscribirse.");
+            navigate("/login");
+            return;
+        }
+
         fetch(`http://localhost:8080/activities/${activityId}`)
             .then((res) => res.json())
             .then((data) => {
+
+
                 if (data.inscriptions != null) {
                     for (let index = 0; index < data.inscriptions.length; index++) {
                         if (userId == data.inscriptions[index].user_id) {
@@ -31,7 +44,16 @@ const Inscription = () => {
                             return
                         }
                     }
+
+                    if (data.inscriptions.length >= data.quotas) {
+                        alert("No hay más plazas disponibles para esta actividad.");
+                        setHasSubmitted(true);
+                        navigate("/activities");
+                        return
+                    }
                 }
+
+
                 if (!hasSubmitted) {
                     fetch("http://localhost:8080/users/inscription", {
                         method: "POST",
