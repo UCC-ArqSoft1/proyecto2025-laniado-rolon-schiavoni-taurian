@@ -2,7 +2,7 @@ import './style_app.css';
 import Activities from './activities';
 import Login from './login';
 import Activity from './activity';
-import MyActivities from './myactivities';
+import MyActivities from './MyActivities';
 import Inscription from './inscription';
 import MyActivity from './myactivity';
 import { BrowserRouter, Routes, Route } from "react-router-dom";

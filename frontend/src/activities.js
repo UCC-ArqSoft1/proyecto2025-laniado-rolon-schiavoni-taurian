@@ -3,29 +3,18 @@ import { useNavigate } from "react-router-dom";
 import './style_activities.css';
 
 function SaludoUsuario() {
-  const userID = localStorage.getItem("userID");
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (userID) {
-      fetch(`http://localhost:8080/users/${userID}`)
-        .then(res => res.json())
-        .then(data => setUser(data))
-        .catch(err => console.error('Error al cargar usuario:', err));
-    }
-  }, []);
-
+  const userName = localStorage.getItem("userName");
   return (
     <div>
-      {user ? <h2 className="user-welcome">Hello {user.first_name} {user.last_name}!</h2> : <p className="user-welcome">Cargando usuario...</p>}
+      <h2 className="user-welcome">Hello {userName}</h2>
     </div>
   );
 }
 
 const Activities = () => {
   const [activities, setActivities] = useState([]);
-  const [searchKey, setSearchKey] = useState(""); 
-  const [searchValue, setSearchValue] = useState(""); 
+  const [searchKey, setSearchKey] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const userID = localStorage.getItem("userID");
 
