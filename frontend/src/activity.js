@@ -17,11 +17,11 @@ const Activity = () => {
   if (!activity) return <p className="text-center mt-5">Loading...</p>;
 
   return (
-    
+
     <div className="container my-5">
-     <button
+      <button
         className="volver-btn"
-        onClick={() => navigate(`/users/${userID}/activities`)}
+        onClick={() => navigate(`/activities`)}
       >
         Go back
       </button>

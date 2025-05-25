@@ -42,7 +42,7 @@ const MyActivities = () => {
       >
         Go back
       </button>
-      <SaludoUsuario/>
+      <SaludoUsuario />
       <div className="my-activities-wrapper">
         <h2 className="title">My Activities</h2>
         <div className="my-activities-container">
