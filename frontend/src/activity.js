@@ -14,7 +14,7 @@ const Activity = () => {
       .then((data) => setActivity(data));
   }, [id]);
 
-  if (!activity) return <p className="text-center mt-5">Cargando...</p>;
+  if (!activity) return <p className="text-center mt-5">Loading...</p>;
 
   return (
     
@@ -23,21 +23,21 @@ const Activity = () => {
         className="volver-btn"
         onClick={() => navigate(`/users/${userID}/activities`)}
       >
-        Volver
+        Go back
       </button>
       <div className="card-activity">
         <img src="https://via.placeholder.com/450x300" alt="Actividad" />
         <div className="card-activity-body">
           <h2 className="card-activity-title">{activity.name}</h2>
-          <p><strong>Descripción:</strong> {activity.description}</p>
-          <p><strong>Categoría:</strong> {activity.category}</p>
-          <p><strong>Profesor:</strong> {activity.profesor_name}</p>
-          <p><strong>Horarios:</strong> {activity.schedules}</p>
+          <p><strong>Description:</strong> {activity.description}</p>
+          <p><strong>Category:</strong> {activity.category}</p>
+          <p><strong>Professor:</strong> {activity.profesor_name}</p>
+          <p><strong>Schedule:</strong> {activity.schedules}</p>
           <button
             className="btn btn-dark mt-3"
             onClick={() => navigate(`/users/inscription/${activity.id}`)}
           >
-            Inscribirme
+            Join Activity
           </button>
         </div>
       </div>

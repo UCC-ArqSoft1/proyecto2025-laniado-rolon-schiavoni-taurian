@@ -29,6 +29,7 @@ const Login = () => {
       const data = await response.json();
       document.cookie = `token=${data.token}; path=/; SameSite=Strict`;
       localStorage.setItem("userID", data.user_id);
+      localStorage.setItem("userName", data.name);
       navigate("/activities");
     } catch (err) {
       setError(err.message);
@@ -37,7 +38,7 @@ const Login = () => {
 
   return (
     <div className={`container ${rightPanelActive ? "right-panel-active" : ""}`} id="container">
-      
+
       {/* SIGN IN */}
       <div className="form-container sign-in-container">
         <form onSubmit={handleLogin}>
