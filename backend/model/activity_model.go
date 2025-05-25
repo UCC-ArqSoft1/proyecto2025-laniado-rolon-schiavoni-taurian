@@ -10,6 +10,6 @@ type ActivityModel struct {
 	Schedule             string       `gorm:"type:varchar(100);not null"`
 	Active               bool         `gorm:"default:true"`
 	InscriptionsActivity Inscriptions `gorm:"foreignKey:ActivityID"` //FK
-	Photo                string       `gorm:"type:varchar(100);not null"`
+	Photo                string       `gorm:"type:varchar(300);not null"`
 }
 type Activities []ActivityModel
