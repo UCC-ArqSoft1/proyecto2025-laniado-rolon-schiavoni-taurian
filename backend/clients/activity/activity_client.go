@@ -36,7 +36,7 @@ func GetActivityByID(id int) (model.ActivityModel, error) {
 	return activity, err
 }
 
-func GetFilteredActivities(category string, name string, description string, schedule string) (model.Activities, error) {
+func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (model.Activities, error) {
 	var activities model.Activities
 	var err error
 
@@ -53,6 +53,9 @@ func GetFilteredActivities(category string, name string, description string, sch
 	}
 	if schedule != "" {
 		query = query.Where("schedule LIKE ?", "%"+schedule+"%")
+	}
+	if professor_name != "" {
+		query = query.Where("profesor_name LIKE ?", "%"+professor_name+"%")
 	}
 
 	query.Find(&activities)

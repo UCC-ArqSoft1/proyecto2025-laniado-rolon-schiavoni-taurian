@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './style_activities.css';
+import "./style_activities.css";
 
 function SaludoUsuario() {
   const userName = localStorage.getItem("userName");
@@ -21,18 +21,22 @@ const Activities = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchKey && searchValue) {
-      fetch(`http://localhost:8080/activities?${searchKey}=${encodeURIComponent(searchValue)}`)
-        .then(res => res.json())
-        .then(data => setActivities(data))
-        .catch(err => console.error("Error fetching activities:", err));
+      fetch(
+        `http://localhost:8080/activities?${searchKey}=${encodeURIComponent(
+          searchValue
+        )}`
+      )
+        .then((res) => res.json())
+        .then((data) => setActivities(data))
+        .catch((err) => console.error("Error fetching activities:", err));
     }
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/activities')
-      .then(res => res.json())
-      .then(data => setActivities(data))
-      .catch(err => console.error("Error fetching activities:", err));
+    fetch("http://localhost:8080/activities")
+      .then((res) => res.json())
+      .then((data) => setActivities(data))
+      .catch((err) => console.error("Error fetching activities:", err));
   }, []);
 
   return (
@@ -43,29 +47,32 @@ const Activities = () => {
       >
         My Activities
       </button>
-      <header className="header">
-      </header>
+      <header className="header"></header>
       <form className="search-navbar" onSubmit={handleSearch}>
         <select
           value={searchKey}
-          onChange={e => setSearchKey(e.target.value)}
+          onChange={(e) => setSearchKey(e.target.value)}
           className="search-select"
           required
         >
           <option value="">Filter</option>
-          <option value="name">Activity Name</option>
-          <option value="category">Activity Category</option>
-          <option value="profesor_name">Activity Professor</option>
+          <option value="name">Name</option>
+          <option value="category">Category</option>
+          <option value="professor_name">Professor</option>
+          <option value="schedules">Schedule</option>
+          <option value="description">Description</option>
         </select>
         <input
           type="text"
           value={searchValue}
-          onChange={e => setSearchValue(e.target.value)}
+          onChange={(e) => setSearchValue(e.target.value)}
           className="search-input"
           placeholder="Enter value"
           required
         />
-        <button type="submit" className="search-btn">Search</button>
+        <button type="submit" className="search-btn">
+          Search
+        </button>
       </form>
       <div className="container">
         <SaludoUsuario />
@@ -73,7 +80,7 @@ const Activities = () => {
           {activities.map((activity) => (
             <div className="col" key={activity.id}>
               <div className="card-activity">
-                <img src="https://via.placeholder.com/450x300" alt="Actividad" />
+                <img src={activity.photo} alt="Actividad" />
                 <div className="card-activity-body d-flex flex-column">
                   <h5 className="card-activity-title">{activity.name}</h5>
                   <p className="card-activity-text">{activity.description}</p>

@@ -33,15 +33,16 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 	activityDto.Schedules = activity.Schedule
 	activityDto.InscriptionsActivity = insDto
 	activityDto.Active = activity.Active
+	activityDto.Photo = activity.Photo
 	return activityDto, err
 }
 
-func GetFilteredActivities(category string, name string, description string, schedule string) (dto.ActivitiesDto, error) {
+func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (dto.ActivitiesDto, error) {
 	var activities model.Activities
 	var activitiesDto dto.ActivitiesDto
 	var err error
 
-	activities, err = activityClient.GetFilteredActivities(category, name, description, schedule)
+	activities, err = activityClient.GetFilteredActivities(category, name, description, schedule, professor_name)
 
 	for _, activity := range activities {
 		var insDto dto.Inscriptions
@@ -62,6 +63,7 @@ func GetFilteredActivities(category string, name string, description string, sch
 			Schedules:            activity.Schedule,
 			InscriptionsActivity: insDto,
 			Active:               activity.Active,
+			Photo:                activity.Photo,
 		}
 		activitiesDto = append(activitiesDto, activityDto)
 	}

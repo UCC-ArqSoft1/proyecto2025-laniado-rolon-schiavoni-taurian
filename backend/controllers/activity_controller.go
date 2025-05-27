@@ -39,8 +39,9 @@ func GetFilteredActivities(ctx *gin.Context) {
 	name := ctx.Query("name")
 	description := ctx.Query("description")
 	schedule := ctx.Query("schedule")
+	professor_name := ctx.Query("professor_name")
 
-	activities, err := services.GetFilteredActivities(category, name, description, schedule)
+	activities, err := services.GetFilteredActivities(category, name, description, schedule, professor_name)
 	if err != nil {
 		ctx.String(404, "No hay actividades")
 		return
