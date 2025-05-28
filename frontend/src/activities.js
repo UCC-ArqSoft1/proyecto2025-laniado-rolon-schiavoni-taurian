@@ -29,7 +29,13 @@ const Activities = () => {
         .then((res) => res.json())
         .then((data) => setActivities(data))
         .catch((err) => console.error("Error fetching activities:", err));
+    } else if (searchKey == "all") {
+      fetch("http://localhost:8080/activities")
+        .then((res) => res.json())
+        .then((data) => setActivities(data))
+        .catch((err) => console.error("Error fetching activities:", err));
     }
+    setSearchValue("");
   };
 
   useEffect(() => {
@@ -55,7 +61,7 @@ const Activities = () => {
           className="search-select"
           required
         >
-          <option value="">Filter</option>
+          <option value="all">All</option>
           <option value="name">Name</option>
           <option value="category">Category</option>
           <option value="professor_name">Professor</option>
@@ -67,8 +73,8 @@ const Activities = () => {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className="search-input"
-          placeholder="Enter value"
-          required
+          placeholder={searchKey === "all" ? "" : "Enter value"}
+          disabled={searchKey === "all"}
         />
         <button type="submit" className="search-btn">
           Search
