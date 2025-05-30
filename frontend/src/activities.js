@@ -4,9 +4,10 @@ import "./style_activities.css";
 
 function SaludoUsuario() {
   const userName = localStorage.getItem("userName");
+  const userSurname = localStorage.getItem("surname");
   return (
     <div>
-      <h2 className="user-welcome">Hello {userName}</h2>
+      <h2 className="user-welcome">Hello {userName} {userSurname}!</h2>
     </div>
   );
 }
@@ -29,7 +30,7 @@ const Activities = () => {
         .then((res) => res.json())
         .then((data) => setActivities(data))
         .catch((err) => console.error("Error fetching activities:", err));
-    } else if (searchKey == "all") {
+    } else if (searchKey === "all") {
       fetch("http://localhost:8080/activities")
         .then((res) => res.json())
         .then((data) => setActivities(data))

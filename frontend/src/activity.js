@@ -2,6 +2,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./style_activities.css";
 
+
+function SaludoUsuario() {
+  const userName = localStorage.getItem("userName");
+  const userSurname = localStorage.getItem("surname");
+  return (
+    <div>
+      <h2 className="user-welcome">Hello {userName} {userSurname}!</h2>
+    </div>
+  );
+}
+
 const Activity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -18,6 +29,7 @@ const Activity = () => {
 
   return (
     <div className="container my-5">
+      <SaludoUsuario />
       <button className="volver-btn" onClick={() => navigate(`/activities`)}>
         Go back
       </button>

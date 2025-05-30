@@ -12,9 +12,6 @@ import (
 )
 
 func GetActivityByID(ctx *gin.Context) {
-	ctx.Header("Access-Control-Allow-Origin", "*")
-	ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	ctx.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
 
 	activityIDString := ctx.Param("id")                  //me devuelve algo que quiero de la url, le debo poner el mismo nombre
 	activityIDInt, err := strconv.Atoi(activityIDString) //convierto el dato en int, el err representa el error que devuelve el cambio de stoi, si no funciona, es una variable
@@ -30,10 +27,7 @@ func GetActivityByID(ctx *gin.Context) {
 	ctx.JSON(200, activity) //devuelvo un JSON
 }
 
-func GetFilteredActivities(ctx *gin.Context) {
-	ctx.Header("Access-Control-Allow-Origin", "*")
-	ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	ctx.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
+func GetFilteredActivities(ctx *gin.Context) { //context contiene la info de la request y la response, yo la edito en esta funcion con lo que quiero
 
 	category := ctx.Query("category")
 	name := ctx.Query("name")

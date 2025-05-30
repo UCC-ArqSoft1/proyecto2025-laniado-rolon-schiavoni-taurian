@@ -15,7 +15,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserID int    `json:"user_id"`
-	Token  string `json:"token"`
-	Name   string `json:"name"`
+	UserID  int    `json:"user_id"`
+	Token   string `json:"token"`
+	Name    string `json:"name"`
+	Surname string `json:"surname"`
 }
