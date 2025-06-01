@@ -7,25 +7,23 @@ const Inscription = () => {
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const hasRun = useRef(false);
 
+
     useEffect(() => {
         if (hasRun.current) return;
         hasRun.current = true;
         // Prevent running twice
 
-        const userId = localStorage.getItem("userID");
-        if (!userId) {
-            alert("Debe iniciar sesión para inscribirse.");
+        //obtener id de usuario del tokem almacenado en las cookies, hay que parsear el token para obtener el userId
+
+        const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+        if (!token) {
+            alert("No estás autenticado. Por favor, inicia sesión.");
             navigate("/login");
             return;
         }
-
-        //busco el token de las cookies
-        const token = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("token="))
-            ?.split("=")[1];
-        if (!token) {
-            alert("Debe iniciar sesión para inscribirse.");
+        const userId = JSON.parse(atob(token.split('=')[1].split('.')[1])).user_id;
+        if (!userId) {
+            alert("No se pudo obtener el ID de usuario. Por favor, inicia sesión nuevamente.");
             navigate("/login");
             return;
         }
@@ -59,10 +57,12 @@ const Inscription = () => {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
+                            'Authorization': `${token}`, // Este fragmento establece una cabecera HTTP
                         },
                         body: JSON.stringify({
                             user_id: parseInt(userId),
                             activity_id: parseInt(activityId),
+
                         }),
                     })
                         .then((response) => {

@@ -68,3 +68,24 @@ func GetUserActivities(ctx *gin.Context) {
 	// si el usuario existe, devolver las actividades
 	ctx.JSON(http.StatusOK, activities)
 }
+
+func VerifyToken(ctx *gin.Context) {
+	// recibo el token desde el header de la request
+	token := ctx.GetHeader("Authorization")
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
+		ctx.Abort()
+		return
+	}
+
+	// llamar al servicio de verify token
+	err := services.VerifyToken(token)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		ctx.Abort()
+		return
+	}
+
+	// si el token es valido, devolver el id del usuario
+	//ctx.JSON(http.StatusOK, gin.H{"userID": userID})
+}

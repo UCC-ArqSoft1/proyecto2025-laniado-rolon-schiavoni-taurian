@@ -43,7 +43,7 @@ func GetFilteredActivities(category string, name string, description string, sch
 	query := Db // comenzamos con el DB base
 
 	if category != "" {
-		query = query.Where("category = ?", category)
+		query = query.Where("category LIKE ?", "%"+category+"%")
 	}
 	if name != "" {
 		query = query.Where("name LIKE ?", "%"+name+"%")

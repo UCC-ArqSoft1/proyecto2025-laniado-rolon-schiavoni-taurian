@@ -12,6 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/activities" element={<Activities />} />
         <Route path="/activities/:id" element={<Activity />} />
         <Route path="/users/:id/activities" element={<MyActivities />} />

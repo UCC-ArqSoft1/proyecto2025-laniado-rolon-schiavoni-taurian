@@ -9,7 +9,7 @@ import (
 
 const (
 	// TokenExpirationTime is the expiration time for the JWT token
-	jwtDuration = 1 * time.Minute
+	jwtDuration = 20 * time.Second
 	// TokenIssuer is the issuer of the JWT token
 	jwtSecret = "jwtSecret"
 )
@@ -37,4 +37,35 @@ func GenerateJWT(userID int) (string, error) {
 		return "", fmt.Errorf("failed generating token: %w", err)
 	}
 	return tokenString, nil
+}
+
+// ValidateJWT validates the JWT token and returns the user ID
+func ValidateJWT(tokenString string) error {
+	// parse the token
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		// check if the signing method is valid
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(jwtSecret), nil
+	})
+
+	if err != nil {
+		return fmt.Errorf("failed parsing token: %w", err)
+	}
+
+	// check if the token is valid
+	claims, ok := token.Claims.(*jwt.RegisteredClaims)
+
+	if ok {
+
+		if claims.ExpiresAt != nil && claims.ExpiresAt.Before(time.Now()) {
+			return fmt.Errorf("token expired at %v", claims.ExpiresAt.Time)
+		}
+		// if the token is valid, return nil
+		return nil
+
+	}
+
+	return fmt.Errorf("invalid token")
 }
