@@ -2,13 +2,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./style_activities.css";
 
-
 function SaludoUsuario() {
   const userName = localStorage.getItem("userName");
   const userSurname = localStorage.getItem("surname");
   return (
     <div>
-      <h2 className="user-welcome">Hello {userName} {userSurname}!</h2>
+      <h2 className="user-welcome">
+        Hello {userName} {userSurname}!
+      </h2>
     </div>
   );
 }
@@ -17,7 +18,6 @@ const Activity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activity, setActivity] = useState(null);
-  const userID = localStorage.getItem("userID");
 
   useEffect(() => {
     fetch(`http://localhost:8080/activities/${id}`)

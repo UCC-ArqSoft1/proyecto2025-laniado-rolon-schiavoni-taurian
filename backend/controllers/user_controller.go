@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/dto"
 	"backend/services"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -38,9 +39,13 @@ func GetUserByID(ctx *gin.Context) {
 	// recibo el id del usuario desde el path de la request
 	userID := ctx.Param("id")
 	// hago string a int
-	userIDInt, err := strconv.Atoi(userID)
+	userIDInt, err2 := strconv.Atoi(userID)
 	// llamar al servicio de get user by id
 	user, err := services.GetUserByID(userIDInt)
+	if err2 != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
 	if err != nil {
 		ctx.JSON(404, "El usuario no existe")
 		return
@@ -51,6 +56,11 @@ func GetUserByID(ctx *gin.Context) {
 
 func GetUserActivities(ctx *gin.Context) {
 
+	tokenUserID, exists := ctx.Get("tokenUserID")
+	if !exists {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Token user ID not found"})
+		return
+	}
 	// recibo el id del usuario desde el path de la request
 	userID := ctx.Param("id")
 	// hago string a int
@@ -59,12 +69,19 @@ func GetUserActivities(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
+
+	if tokenUserID.(int) != userIDInt {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You are not authorized to access this user's activities"})
+		return
+	}
+
 	// llamar al servicio de get user activities
 	activities, err2 := services.GetUserActivities(userIDInt)
 	if err2 != nil {
 		ctx.JSON(404, "El usuario no tiene actividades")
 		return
 	}
+	fmt.Println("id del token: ", tokenUserID)
 	// si el usuario existe, devolver las actividades
 	ctx.JSON(http.StatusOK, activities)
 }
@@ -79,7 +96,7 @@ func VerifyToken(ctx *gin.Context) {
 	}
 
 	// llamar al servicio de verify token
-	err := services.VerifyToken(token)
+	tokenUserID, err := services.VerifyToken(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		ctx.Abort()
@@ -87,5 +104,6 @@ func VerifyToken(ctx *gin.Context) {
 	}
 
 	// si el token es valido, devolver el id del usuario
-	//ctx.JSON(http.StatusOK, gin.H{"userID": userID})
+	ctx.Set("tokenUserID", tokenUserID)
+	ctx.Next()
 }
