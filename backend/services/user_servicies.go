@@ -83,7 +83,6 @@ func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 }
 
 func VerifyToken(token string) error {
-	log.Println("Verificando token: ", token)
 	err := utils.ValidateJWT(token)
 	if err != nil {
 		log.Println("Error al verificar el token")

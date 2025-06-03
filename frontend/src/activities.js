@@ -50,7 +50,7 @@ const Activities = () => {
     <div>
       <button
         className="my-activities-btn"
-        onClick={() => navigate(`/users/${userID}/activities`)}
+        onClick={() => navigate(`/users/activities`)}
       >
         My Activities
       </button>

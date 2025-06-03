@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	dsn := "root:gabi12@tcp(127.0.0.1:3306)/arqui_software?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:FranMySql1@@tcp(127.0.0.1:3306)/arqui_software?charset=utf8mb4&parseTime=True&loc=Local"
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Info("Connection Failed to Open")
