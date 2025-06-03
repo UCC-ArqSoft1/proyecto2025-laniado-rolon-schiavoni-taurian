@@ -82,12 +82,12 @@ func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 	return actDto, nil
 }
 
-func VerifyToken(token string) (int, error) {
+func VerifyToken(token string) error {
 	log.Println("Verificando token: ", token)
-	userID, err := utils.ValidateJWT(token)
+	err := utils.ValidateJWT(token)
 	if err != nil {
 		log.Println("Error al verificar el token")
-		return 0, fmt.Errorf("failed to verify token: %w", err)
+		return fmt.Errorf("failed to verify token: %w", err)
 	}
-	return userID, nil
+	return nil
 }

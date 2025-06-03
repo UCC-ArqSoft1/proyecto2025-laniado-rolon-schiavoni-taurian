@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -41,7 +40,7 @@ func GenerateJWT(userID int) (string, error) {
 }
 
 // ValidateJWT validates the JWT token and returns the user ID
-func ValidateJWT(tokenString string) (int, error) {
+func ValidateJWT(tokenString string) error {
 	// parse the token
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// check if the signing method is valid
@@ -52,7 +51,7 @@ func ValidateJWT(tokenString string) (int, error) {
 	})
 
 	if err != nil {
-		return 0, fmt.Errorf("failed parsing token: %w", err)
+		return fmt.Errorf("failed parsing token: %w", err)
 	}
 
 	// check if the token is valid
@@ -61,16 +60,10 @@ func ValidateJWT(tokenString string) (int, error) {
 	if ok {
 
 		if claims.ExpiresAt != nil && claims.ExpiresAt.Before(time.Now()) {
-			return 0, fmt.Errorf("token expired at %v", claims.ExpiresAt.Time)
+			return fmt.Errorf("token expired at %v", claims.ExpiresAt.Time)
 		}
-		// if the token is valid, return nil
-		userID, err := strconv.Atoi(claims.ID)
-		if err != nil {
-			return 0, fmt.Errorf("invalid user ID in token: %w", err)
-		}
-		return userID, nil
-
+		return nil
 	}
 
-	return 0, fmt.Errorf("invalid token")
+	return fmt.Errorf("invalid token")
 }

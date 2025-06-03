@@ -43,11 +43,6 @@ const MyActivities = () => {
             navigate("/login");
             return null;
           }
-          if (res.status === 403) {
-            alert("No tienes permisos para acceder a estas actividades.");
-            navigate("/activities");
-            throw new Error("Forbidden"); // Throw error to skip next .then()
-          }
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
           }
@@ -62,7 +57,7 @@ const MyActivities = () => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [userID, token, navigate]);
 
   if (!userID) {
     return <div>Redirigiendo...</div>;
