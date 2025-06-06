@@ -19,7 +19,7 @@ func Login(ctx *gin.Context) {
 
 	// llamar al servicio de login
 	// el servicio de login devuelve el id del usuario y el token
-	ID, token, name, surname, err := services.Login(request.Email, request.Password)
+	token, name, surname, err := services.Login(request.Email, request.Password)
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "No se pudo iniciar sesion"})
 		return
@@ -27,7 +27,6 @@ func Login(ctx *gin.Context) {
 	// si el login es exitoso, devolver el id del usuario y el token
 	// el token es un string que se genera al momento de hacer login
 	ctx.JSON(201, dto.LoginResponse{
-		UserID:  ID,
 		Token:   token,
 		Name:    name,
 		Surname: surname,

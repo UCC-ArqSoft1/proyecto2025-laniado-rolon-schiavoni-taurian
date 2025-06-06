@@ -1,12 +1,9 @@
 package controllers
 
 import (
-	//importo modulo propio
 	"backend/services" //importo modulo propio
+	_ "fmt"            //importo libreria externa
 	"strconv"
-
-	//importo modulo propio
-	_ "fmt" //importo libreria externa
 
 	"github.com/gin-gonic/gin" //importo un link
 )

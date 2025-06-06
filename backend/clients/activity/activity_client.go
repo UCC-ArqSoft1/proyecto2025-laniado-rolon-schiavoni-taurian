@@ -23,7 +23,7 @@ var Db *gorm.DB
 func GetActivityByID(id int) (model.ActivityModel, error) {
 	var activity model.ActivityModel
 	var err error
-	Db.Preload("InscriptionsActivity.Activity").First(&activity, id)
+	Db.Preload("InscriptionsActivity").First(&activity, id)
 
 	if activity.ID == 0 {
 		log.Error("Activity not found")
@@ -33,7 +33,7 @@ func GetActivityByID(id int) (model.ActivityModel, error) {
 
 	log.Debugf("Activity Found: %+v", activity)
 
-	return activity, err
+	return activity, err //Devuelve un DAO (Data Access Object) de la actividad
 }
 
 func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (model.Activities, error) {

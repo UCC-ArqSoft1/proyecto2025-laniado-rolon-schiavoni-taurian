@@ -2,11 +2,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./style_activities.css";
 
+
 const MyActivity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activity, setActivity] = useState(null);
-  const userID = localStorage.getItem("userID");
 
   useEffect(() => {
     fetch(`http://localhost:8080/activities/${id}`)
@@ -20,7 +20,7 @@ const MyActivity = () => {
     <div className="container my-5">
       <button
         className="volver-btn"
-        onClick={() => navigate(`/users/${userID}/activities`)}
+        onClick={() => navigate(`/users/activities`)}
       >
         Go back
       </button>

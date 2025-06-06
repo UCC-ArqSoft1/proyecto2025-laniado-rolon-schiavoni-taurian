@@ -17,7 +17,6 @@ const Activities = () => {
   const [searchKey, setSearchKey] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
-  const userID = localStorage.getItem("userID");
 
   const handleSearch = (e) => {
     e.preventDefault();

@@ -14,10 +14,9 @@ func mapUrls() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		MaxAge:           12 * time.Hour, //almacena la configuracion de CORS por 12 horas
 	}))
 
-	//router.GET("/activities", controllers.GetAllActivities)             //trae todas las actividades
 	router.GET("/activities/:id", controllers.GetActivityByID)   //trae una actividad por id
 	router.GET("/activities", controllers.GetFilteredActivities) //trae todas las actividades o filtradas por categoria, nombre o descripcion
 	router.POST("/users/login", controllers.Login)
