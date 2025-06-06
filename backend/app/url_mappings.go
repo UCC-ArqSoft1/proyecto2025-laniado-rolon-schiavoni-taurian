@@ -17,8 +17,8 @@ func mapUrls() {
 		MaxAge:           12 * time.Hour, //almacena la configuracion de CORS por 12 horas
 	}))
 
-	router.GET("/activities/:id", controllers.GetActivityByID)   //trae una actividad por id
-	router.GET("/activities", controllers.GetFilteredActivities) //trae todas las actividades o filtradas por categoria, nombre o descripcion
+	router.GET("/activities/:id", controllers.VerifyToken, controllers.GetActivityByID)   //trae una actividad por id
+	router.GET("/activities", controllers.VerifyToken, controllers.GetFilteredActivities) //trae todas las actividades o filtradas por categoria, nombre o descripcion
 	router.POST("/users/login", controllers.Login)
 	router.POST("/users/inscription", controllers.VerifyToken, controllers.Inscription)
 	router.GET("/users/:id/activities", controllers.VerifyToken, controllers.GetUserActivities) //trae todas las actividades de un usuario

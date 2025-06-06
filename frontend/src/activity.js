@@ -23,7 +23,26 @@ const Activity = () => {
   useEffect(() => {
     if (hasRun.current) return;
     hasRun.current = true;
-    fetch(`http://localhost:8080/activities/${id}`)
+
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+
+    if (!token) {
+      alert("You are not authenticated. Please log in.");
+      navigate("/login");
+      return;
+    }
+
+
+    fetch(`http://localhost:8080/activities/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+      },
+    })
       .then((res) => res.json())
       .then((data) => setActivity(data));
   }, [id]);

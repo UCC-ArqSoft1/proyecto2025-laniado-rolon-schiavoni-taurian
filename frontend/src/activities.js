@@ -21,19 +21,38 @@ const Activities = () => {
 
   const handleSearch = (e) => {
 
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
 
     e.preventDefault();
     if (searchKey && searchValue) {
+
+
+
       fetch(
         `http://localhost:8080/activities?${searchKey}=${encodeURIComponent(
           searchValue
-        )}`
+        )}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+        },
+      }
       )
         .then((res) => res.json())
         .then((data) => setActivities(data))
         .catch((err) => console.error("Error fetching activities:", err));
     } else if (searchKey === "all") {
-      fetch("http://localhost:8080/activities")
+      fetch("http://localhost:8080/activities", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+        },
+
+      })
         .then((res) => res.json())
         .then((data) => setActivities(data))
         .catch((err) => console.error("Error fetching activities:", err));
@@ -44,7 +63,27 @@ const Activities = () => {
   useEffect(() => {
     if (hasRun.current) return;
     hasRun.current = true;
-    fetch("http://localhost:8080/activities")
+
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+
+    if (!token) {
+      alert("You are not authenticated. Please log in.");
+      navigate("/login");
+      return;
+    }
+
+
+
+    fetch("http://localhost:8080/activities", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+      },
+    })
       .then((res) => res.json())
       .then((data) => setActivities(data))
       .catch((err) => console.error("Error fetching activities:", err));
