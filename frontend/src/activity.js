@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./style_activities.css";
 
 function SaludoUsuario() {
@@ -18,8 +18,11 @@ const Activity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activity, setActivity] = useState(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
     fetch(`http://localhost:8080/activities/${id}`)
       .then((res) => res.json())
       .then((data) => setActivity(data));

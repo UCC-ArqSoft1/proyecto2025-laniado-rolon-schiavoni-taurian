@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style_activities.css";
 
@@ -14,11 +14,14 @@ function SaludoUsuario() {
 
 const Activities = () => {
   const [activities, setActivities] = useState([]);
-  const [searchKey, setSearchKey] = useState("");
+  const [searchKey, setSearchKey] = useState("all");
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const hasRun = useRef(false);
 
   const handleSearch = (e) => {
+
+
     e.preventDefault();
     if (searchKey && searchValue) {
       fetch(
@@ -39,6 +42,8 @@ const Activities = () => {
   };
 
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
     fetch("http://localhost:8080/activities")
       .then((res) => res.json())
       .then((data) => setActivities(data))
@@ -57,9 +62,13 @@ const Activities = () => {
       <form className="search-navbar" onSubmit={handleSearch}>
         <select
           value={searchKey}
-          onChange={(e) => setSearchKey(e.target.value)}
+          onChange={(e) => {
+            setSearchKey(e.target.value);
+            if (e.target.value === "all") setSearchValue("");
+          }}
           className="search-select"
           required
+
         >
           <option value="all">All</option>
           <option value="name">Name</option>
@@ -71,10 +80,11 @@ const Activities = () => {
         <input
           type="text"
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          className="search-input"
           placeholder={searchKey === "all" ? "" : "Enter value"}
           disabled={searchKey === "all"}
+          onChange={(e) => setSearchValue(e.target.value)}
+          className="search-input"
+
         />
         <button type="submit" className="search-btn">
           Search

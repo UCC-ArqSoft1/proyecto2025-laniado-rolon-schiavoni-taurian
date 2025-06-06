@@ -80,7 +80,7 @@ const Inscription = () => {
       });
   }, [activityId, hasSubmitted, navigate, userID]);
 
-  return;
+  return null;
 };
 
 export default Inscription;
