@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/dto"
 	"backend/services"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,16 +13,16 @@ func Inscription(ctx *gin.Context) {
 	var request dto.InscriptionRequest
 	//recibo el body de la request
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid request"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
 
 	//llamo al servicio de inscription
 	err := services.Inscription(request.UserID, request.ActivityID)
 	if err != nil {
-		ctx.JSON(403, gin.H{"error": "Inscription failed"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Inscription failed"})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"message": "Inscription successful"})
+	ctx.JSON(http.StatusCreated, gin.H{"message": "Inscription successful"})
 }

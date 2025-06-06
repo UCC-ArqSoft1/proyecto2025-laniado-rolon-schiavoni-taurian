@@ -26,7 +26,7 @@ func Login(ctx *gin.Context) {
 	}
 	// si el login es exitoso, devolver el id del usuario y el token
 	// el token es un string que se genera al momento de hacer login
-	ctx.JSON(201, dto.LoginResponse{
+	ctx.JSON(http.StatusOK, dto.LoginResponse{
 		Token:   token,
 		Name:    name,
 		Surname: surname,
@@ -37,12 +37,18 @@ func GetUserByID(ctx *gin.Context) {
 	// recibo el id del usuario desde el path de la request
 	userID := ctx.Param("id")
 	// hago string a int
-	userIDInt, err := strconv.Atoi(userID)
+	userIDInt, err1 := strconv.Atoi(userID)
 	// llamar al servicio de get user by id
+
+	if err1 != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
 	user, err := services.GetUserByID(userIDInt)
 
 	if err != nil {
-		ctx.JSON(404, "El usuario no existe")
+		ctx.JSON(http.StatusNotFound, "El usuario no existe")
 		return
 	}
 	// si el usuario existe, devolver el usuario
@@ -62,7 +68,7 @@ func GetUserActivities(ctx *gin.Context) {
 	// llamar al servicio de get user activities
 	activities, err2 := services.GetUserActivities(userIDInt)
 	if err2 != nil {
-		ctx.JSON(404, "El usuario no tiene actividades")
+		ctx.JSON(http.StatusNotFound, "El usuario no tiene actividades")
 		return
 	}
 	// si el usuario existe, devolver las actividades

@@ -17,7 +17,6 @@ func Login(username string, password string) (string, string, string, error) {
 	}
 	if utils.HashSHA256(password) != userModel.PasswordHash {
 		log.Println("Error al obtener el usuario por password")
-		log.Println("Password: ", userModel.PasswordHash)
 		return "", "", "", fmt.Errorf("invalid password")
 
 	}
