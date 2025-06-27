@@ -48,7 +48,7 @@ func GetUserByID(ctx *gin.Context) {
 	user, err := services.GetUserByID(userIDInt)
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, "El usuario no existe")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 	// si el usuario existe, devolver el usuario
@@ -68,7 +68,7 @@ func GetUserActivities(ctx *gin.Context) {
 	// llamar al servicio de get user activities
 	activities, err2 := services.GetUserActivities(userIDInt)
 	if err2 != nil {
-		ctx.JSON(http.StatusNotFound, "El usuario no tiene actividades")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "El usuario no tiene actividades"})
 		return
 	}
 	// si el usuario existe, devolver las actividades
@@ -91,5 +91,22 @@ func VerifyToken(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+}
 
+func VerifyAdminToken(ctx *gin.Context) {
+	// recibo el token desde el header de la request
+	token := ctx.GetHeader("Authorization")
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
+		ctx.Abort()
+		return
+	}
+
+	// llamar al servicio de verify admin token
+	err := services.VerifyAdminToken(token)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		ctx.Abort()
+		return
+	}
 }

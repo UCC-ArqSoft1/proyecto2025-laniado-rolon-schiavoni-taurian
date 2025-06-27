@@ -29,6 +29,7 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 	activityDto.Description = activity.Description
 	activityDto.ProfesorName = activity.ProfesorName
 	activityDto.Quotas = activity.Quotas
+	activityDto.QuotasAvailable = activity.Quotas - len(activity.InscriptionsActivity)
 	activityDto.Day = activity.Day
 	activityDto.HourStart = activity.HourStart
 	activityDto.InscriptionsActivity = insDto
@@ -58,6 +59,7 @@ func GetFilteredActivities(category string, name string, description string, sch
 			Description:          activity.Description,
 			ProfesorName:         activity.ProfesorName,
 			Quotas:               activity.Quotas,
+			QuotasAvailable:      activity.Quotas - len(activity.InscriptionsActivity),
 			Day:                  activity.Day,
 			HourStart:            activity.HourStart,
 			InscriptionsActivity: insDto,

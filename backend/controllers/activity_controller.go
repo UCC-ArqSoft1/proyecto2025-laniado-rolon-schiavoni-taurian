@@ -4,7 +4,6 @@ import (
 	"backend/dto"
 	"backend/services" //importo modulo propio
 	"fmt"
-	_ "fmt" //importo libreria externa
 	"net/http"
 	"strconv"
 
@@ -16,12 +15,12 @@ func GetActivityByID(ctx *gin.Context) {
 	activityIDString := ctx.Param("id")                  //me devuelve algo que quiero de la url, le debo poner el mismo nombre
 	activityIDInt, err := strconv.Atoi(activityIDString) //convierto el dato en int, el err representa el error que devuelve el cambio de stoi, si no funciona, es una variable
 	if err != nil {
-		ctx.String(http.StatusBadRequest, "Id invalido")
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id invalido"})
 		return
 	}
 	activity, err1 := services.GetActivityByID(activityIDInt) //le paso el id de la url
 	if err1 != nil {
-		ctx.String(http.StatusNotFound, "Actividad no encontrada")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Actividad no encontrada"})
 		return
 	}
 	ctx.JSON(http.StatusOK, activity) //devuelvo un JSON
@@ -37,7 +36,7 @@ func GetFilteredActivities(ctx *gin.Context) { //context contiene la info de la 
 
 	activities, err := services.GetFilteredActivities(category, name, description, schedule, professor_name)
 	if err != nil {
-		ctx.String(http.StatusNotFound, "No hay actividades")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "No hay actividades"})
 		return
 	}
 
@@ -51,18 +50,17 @@ func CreateActivity(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&activity); err != nil {
 		fmt.Printf("Error ShouldBindJSON: %v\n", err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error":   "Datos inválidos",
-			"details": err.Error(),
+			"error": "Datos inválidos",
 		})
 		return
 	}
 	//llamo al servicio para crear la actividad
 	err := services.CreateActivity(activity)
 	if err != nil {
-		ctx.String(http.StatusInternalServerError, "Error al crear la actividad")
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error al crear la actividad"})
 		return
 	}
-	ctx.String(http.StatusCreated, "Actividad creada con exito")
+	ctx.JSON(http.StatusCreated, gin.H{"message": "Actividad creada con exito"})
 }
 
 func ModifyActivity(ctx *gin.Context) {
@@ -70,17 +68,17 @@ func ModifyActivity(ctx *gin.Context) {
 	activityIDString := ctx.Param("id")                  //me devuelve algo que quiero de la url, le debo poner el mismo nombre
 	activityIDInt, err := strconv.Atoi(activityIDString) //convierto el dato en int, el err representa el error que devuelve el cambio de stoi, si no funciona, es una variable
 	if err != nil {
-		ctx.String(http.StatusBadRequest, "Id invalido")
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id invalido"})
 		return
 	}
 	activity, err1 := services.GetActivityByID(activityIDInt) //le paso el id de la url
 	if err1 != nil {
-		ctx.String(http.StatusNotFound, "Actividad no encontrada")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Actividad no encontrada"})
 		return
 	}
 
 	if err := ctx.ShouldBindJSON(&activity); err != nil {
-		ctx.String(http.StatusBadRequest, "Datos invalidos")
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos invalidos"})
 		//Gin lee el JSON enviado en el body del request
 		return
 	}
@@ -88,10 +86,10 @@ func ModifyActivity(ctx *gin.Context) {
 
 	err2 := services.ModifyActivity(activity) //le paso el id de la url y los datos de la actividad
 	if err2 != nil {
-		ctx.String(http.StatusNotFound, "Actividad no encontrada")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Actividad no encontrada"})
 		return
 	}
-	ctx.String(http.StatusOK, "Actividad modificada con exito")
+	ctx.JSON(http.StatusOK, gin.H{"message": "Actividad modificada con exito"})
 
 }
 
@@ -99,13 +97,13 @@ func DeleteActivity(ctx *gin.Context) {
 	activityIDString := ctx.Param("id")                  //me devuelve algo que quiero de la url, le debo poner el mismo nombre
 	activityIDInt, err := strconv.Atoi(activityIDString) //convierto el dato en int, el err representa el error que devuelve el cambio de stoi, si no funciona, es una variable
 	if err != nil {
-		ctx.String(http.StatusBadRequest, "Id invalido")
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id invalido"})
 		return
 	}
 	err1 := services.DeleteActivity(activityIDInt) //le paso el id de la url
 	if err1 != nil {
-		ctx.String(http.StatusNotFound, "Actividad no encontrada")
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Actividad no encontrada"})
 		return
 	}
-	ctx.String(http.StatusOK, "Actividad eliminada con exito")
+	ctx.JSON(http.StatusOK, gin.H{"message": "Actividad eliminada con exito"})
 }

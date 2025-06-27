@@ -29,5 +29,10 @@ func Inscription(ctx *gin.Context) {
 		return
 	}
 
+	if code == 2 {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No available quotas"})
+		return
+	}
+
 	ctx.JSON(http.StatusCreated, gin.H{"message": "Inscription successful"})
 }

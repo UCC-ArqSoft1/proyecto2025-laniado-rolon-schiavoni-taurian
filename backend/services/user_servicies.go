@@ -21,7 +21,7 @@ func Login(username string, password string) (string, string, string, error) {
 
 	}
 
-	token, err := utils.GenerateJWT(userModel.ID)
+	token, err := utils.GenerateJWT(userModel.ID, userModel.IsAdmin)
 	if err != nil {
 		log.Println("Error al generar el token")
 		return "", "", "", fmt.Errorf("failed to generate token: %w", err)
@@ -91,17 +91,11 @@ func VerifyToken(token string) error {
 	return nil
 }
 
-func VerifyAdmin(id int) (bool, error) {
-	userModel, err := userCLient.GetUserByID(id)
+func VerifyAdminToken(token string) error {
+	err := utils.ValidateAdminJWT(token)
 	if err != nil {
-		log.Println("Error al obtener el usuario por id")
-		return false, fmt.Errorf("failed to get user by id: %w", err)
+		log.Println("Error al verificar el token de admin")
+		return fmt.Errorf("failed to verify admin token: %w", err)
 	}
-
-	if !userModel.IsAdmin {
-		log.Println("El usuario no es administrador")
-		return false, fmt.Errorf("user is not admin")
-	}
-
-	return true, nil
+	return nil
 }

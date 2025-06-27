@@ -20,6 +20,10 @@ func Inscription(user_id int, activity_id int) (int, error) {
 		}
 	}
 
+	if activitycheck.QuotasAvailable <= 0 { // No available quotas
+		return 2, err // No available quotas, cannot inscribe
+	}
+
 	inscription := dto.InscriptionDto{
 		UserID:          user_id,
 		ActivityID:      activity_id,
