@@ -113,7 +113,8 @@ const Activities = () => {
           <option value="name">Name</option>
           <option value="category">Category</option>
           <option value="professor_name">Professor</option>
-          <option value="schedules">Schedule</option>
+          <option value="day">Day</option>
+          <option value="hour_start">Hour Start</option>
           <option value="description">Description</option>
         </select>
         <input

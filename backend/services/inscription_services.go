@@ -7,7 +7,19 @@ import (
 	"time"
 )
 
-func Inscription(user_id int, activity_id int) error {
+func Inscription(user_id int, activity_id int) (int, error) {
+
+	activitycheck, err := GetActivityByID(activity_id)
+
+	for _, ins := range activitycheck.InscriptionsActivity {
+		if err != nil {
+			return 0, err // Return error if activity not found
+		}
+		if ins.UserID == user_id { // User is already inscribed
+			return 1, err // User is already inscribed, no action needed
+		}
+	}
+
 	inscription := dto.InscriptionDto{
 		UserID:          user_id,
 		ActivityID:      activity_id,
@@ -22,9 +34,9 @@ func Inscription(user_id int, activity_id int) error {
 		Active:          inscription.Active,
 	}
 
-	err := inscriptionClient.CreateInscription(inscriptionModel)
-	if err != nil {
-		return err
+	err1 := inscriptionClient.CreateInscription(inscriptionModel)
+	if err1 != nil {
+		return 0, err1
 	}
-	return nil
+	return 0, nil
 }

@@ -3,6 +3,8 @@ package services
 import (
 	activityClient "backend/clients/activity"
 	"backend/dto"
+	"backend/model"
+	"log"
 )
 
 func GetActivityByID(id int) (dto.ActivityDto, error) {
@@ -27,7 +29,8 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 	activityDto.Description = activity.Description
 	activityDto.ProfesorName = activity.ProfesorName
 	activityDto.Quotas = activity.Quotas
-	activityDto.Schedules = activity.Schedule
+	activityDto.Day = activity.Day
+	activityDto.HourStart = activity.HourStart
 	activityDto.InscriptionsActivity = insDto
 	activityDto.Active = activity.Active
 	activityDto.Photo = activity.Photo
@@ -55,7 +58,8 @@ func GetFilteredActivities(category string, name string, description string, sch
 			Description:          activity.Description,
 			ProfesorName:         activity.ProfesorName,
 			Quotas:               activity.Quotas,
-			Schedules:            activity.Schedule,
+			Day:                  activity.Day,
+			HourStart:            activity.HourStart,
 			InscriptionsActivity: insDto,
 			Active:               activity.Active,
 			Photo:                activity.Photo,
@@ -64,4 +68,59 @@ func GetFilteredActivities(category string, name string, description string, sch
 	}
 
 	return activitiesDto, err
+}
+
+func CreateActivity(activity dto.ActivityRequestDto) error {
+	activityModel := model.ActivityModel{
+		Category:     activity.Category,
+		Name:         activity.Name,
+		Description:  activity.Description,
+		ProfesorName: activity.ProfesorName,
+		Quotas:       activity.Quotas,
+		Day:          activity.Day,
+		HourStart:    activity.HourStart,
+		Active:       activity.Active,
+		Photo:        activity.Photo,
+	}
+
+	_, err := activityClient.CreateActivity(activityModel)
+
+	if err != nil {
+		log.Printf("Error creating activity: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func ModifyActivity(activity dto.ActivityDto) error {
+	activityModel := model.ActivityModel{
+		ID:           activity.ID,
+		Category:     activity.Category,
+		Name:         activity.Name,
+		Description:  activity.Description,
+		ProfesorName: activity.ProfesorName,
+		Quotas:       activity.Quotas,
+		Day:          activity.Day,
+		HourStart:    activity.HourStart,
+		Active:       activity.Active,
+		Photo:        activity.Photo,
+	}
+
+	err := activityClient.ModifyActivity(activityModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteActivity(id int) error {
+	err := activityClient.DeleteActivity(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

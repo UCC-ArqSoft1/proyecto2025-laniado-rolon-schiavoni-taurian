@@ -73,7 +73,8 @@ func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 			ProfesorName: act.ProfesorName,
 			Description:  act.Description,
 			Category:     act.Category,
-			Schedules:    act.Schedule,
+			Day:          act.Day,
+			HourStart:    act.HourStart,
 			Active:       act.Active,
 			Photo:        act.Photo,
 		})
@@ -88,4 +89,19 @@ func VerifyToken(token string) error {
 		return fmt.Errorf("failed to verify token: %w", err)
 	}
 	return nil
+}
+
+func VerifyAdmin(id int) (bool, error) {
+	userModel, err := userCLient.GetUserByID(id)
+	if err != nil {
+		log.Println("Error al obtener el usuario por id")
+		return false, fmt.Errorf("failed to get user by id: %w", err)
+	}
+
+	if !userModel.IsAdmin {
+		log.Println("El usuario no es administrador")
+		return false, fmt.Errorf("user is not admin")
+	}
+
+	return true, nil
 }

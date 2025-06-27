@@ -18,9 +18,14 @@ func Inscription(ctx *gin.Context) {
 	}
 
 	//llamo al servicio de inscription
-	err := services.Inscription(request.UserID, request.ActivityID)
+	code, err := services.Inscription(request.UserID, request.ActivityID)
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Inscription failed"})
+		return
+	}
+
+	if code == 1 {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "User already inscribed"})
 		return
 	}
 

@@ -69,7 +69,10 @@ const Activity = () => {
             <strong>Professor:</strong> {activity.profesor_name}
           </p>
           <p>
-            <strong>Schedule:</strong> {activity.schedules}
+            <strong>Day:</strong> {activity.day}
+          </p>
+          <p>
+            <strong>Start Hour:</strong> {activity.hour_start}
           </p>
           <button
             className="btn btn-dark mt-3"

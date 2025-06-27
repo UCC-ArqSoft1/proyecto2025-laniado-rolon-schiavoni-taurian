@@ -23,5 +23,7 @@ func mapUrls() {
 	router.POST("/users/inscription", controllers.VerifyToken, controllers.Inscription)
 	router.GET("/users/:id/activities", controllers.VerifyToken, controllers.GetUserActivities) //trae todas las actividades de un usuario
 	router.GET("/users/:id", controllers.VerifyToken, controllers.GetUserByID)                  //trae un usuario por id
-
+	router.POST("/activity", controllers.CreateActivity)                                        //crea una actividad
+	router.DELETE("/activity/:id", controllers.DeleteActivity)
+	router.PUT("/activity/:id", controllers.ModifyActivity)
 }

@@ -26,6 +26,7 @@ func GenerateJWT(userID int) (string, error) {
 		Issuer:    "backend",                          // set the issuer of the token
 		Subject:   "auth",                             // set the subject of the token
 		ID:        fmt.Sprintf("%d", userID),          // set the user ID as the subject of the token
+
 	}
 
 	// create the token
