@@ -29,6 +29,7 @@ const Login = () => {
       document.cookie = `token=${data.token}; path=/; SameSite=Strict`;
       localStorage.setItem("userName", data.name);
       localStorage.setItem("surname", data.surname);
+      localStorage.setItem("IsAdmin",data.isAdmin);
       navigate("/activities");
     } catch (err) {
       setError(err.message);

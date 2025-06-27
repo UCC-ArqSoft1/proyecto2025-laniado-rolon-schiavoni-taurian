@@ -3,9 +3,8 @@ package controllers
 import (
 	"backend/dto"
 	"backend/services"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func Inscription(ctx *gin.Context) {

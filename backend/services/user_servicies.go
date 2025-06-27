@@ -8,29 +8,27 @@ import (
 	"log"
 )
 
-func Login(username string, password string) (string, string, string, error) {
+func Login(username string, password string) (string, string, string, bool, error) {
 	userModel, err := userCLient.GetUserByUsername(username)
 	if err != nil {
 		log.Println("Error al obtener el usuario por username")
-		return "", "", "", fmt.Errorf("failed to get user by user: %w", err)
-
+		return "", "", "", false, fmt.Errorf("failed to get user by username: %w", err)
 	}
+
 	if utils.HashSHA256(password) != userModel.PasswordHash {
-		log.Println("Error al obtener el usuario por password")
-		return "", "", "", fmt.Errorf("invalid password")
-
+		log.Println("Error en la validación de password")
+		return "", "", "", false, fmt.Errorf("invalid password")
 	}
 
-	token, err := utils.GenerateJWT(userModel.ID)
+	token, err := utils.GenerateJWT(userModel.ID, userModel.IsAdmin)
 	if err != nil {
 		log.Println("Error al generar el token")
-		return "", "", "", fmt.Errorf("failed to generate token: %w", err)
-
+		return "", "", "", false, fmt.Errorf("failed to generate token: %w", err)
 	}
 
 	name := userModel.FirstName
 	surname := userModel.LastName
-	return token, name, surname, nil
+	return token, name, surname, userModel.IsAdmin, nil
 }
 
 func GetUserByID(id int) (dto.UserDto, error) {
@@ -80,12 +78,21 @@ func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 	}
 	return actDto, nil
 }
-
-func VerifyToken(token string) error {
-	err := utils.ValidateJWT(token)
+func VerifyToken(token string) (error, error) {
+	_, err := utils.ValidateJWT(token)
 	if err != nil {
 		log.Println("Error al verificar el token")
-		return fmt.Errorf("failed to verify token: %w", err)
+		return fmt.Errorf("failed to verify token: %w", err), nil
 	}
-	return nil
+	return nil, nil
+}
+
+func VerifyAdmin(token string) (bool, error) {
+	claims, err := utils.ValidateJWT(token)
+	if err != nil {
+		log.Println("Error al verificar el token")
+		return false, fmt.Errorf("failed to verify token: %w", err)
+	}
+
+	return claims.IsAdmin, nil
 }
