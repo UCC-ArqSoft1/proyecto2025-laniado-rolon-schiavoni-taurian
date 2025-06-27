@@ -1,6 +1,46 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style_activities.css";
+
+function IsAdmin() {
+    const navigate = useNavigate();
+    const hasRun = useRef(false);
+
+
+
+    useEffect(() => {
+        if (hasRun.current) return;
+        hasRun.current = true;
+
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
+
+
+        fetch(`http://localhost:8080/users/admin`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+            },
+        })
+            .then((res) => {
+
+                if (res.status != 200) {
+                    navigate("/activities");
+                    console.error("You are not an admin.");
+                    alert("You are not an admin.");
+                }
+            })
+            .catch((err) => {
+                console.error("Error checking admin status:", err);
+                return false;
+            })
+    }, [hasRun.current]);
+    return
+}
+
+
 
 function SaludoUsuario() {
     const userName = localStorage.getItem("userName");
@@ -12,7 +52,7 @@ function SaludoUsuario() {
     );
 }
 
-const Activities = () => {
+const Admin = () => {
     const [activities, setActivities] = useState([]);
     const [searchKey, setSearchKey] = useState("all");
     const [searchValue, setSearchValue] = useState("");
@@ -112,7 +152,7 @@ const Activities = () => {
                     <option value="all">All</option>
                     <option value="name">Name</option>
                     <option value="category">Category</option>
-                    <option value="professor_name">Professor</option>
+                    <option value="professor_name">puto</option>
                     <option value="day">Day</option>
                     <option value="hour_start">Hour Start</option>
                     <option value="description">Description</option>
@@ -131,6 +171,7 @@ const Activities = () => {
                 </button>
             </form>
             <div className="container">
+                <IsAdmin />
                 <SaludoUsuario />
                 <div className="row row-cols-1 row-cols-2 row-cols-3 g-6">
                     {activities.map((activity) => (
@@ -156,4 +197,4 @@ const Activities = () => {
     );
 };
 
-export default Activities;
+export default Admin;

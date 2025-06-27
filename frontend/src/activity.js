@@ -74,6 +74,9 @@ const Activity = () => {
           <p>
             <strong>Start Hour:</strong> {activity.hour_start}
           </p>
+          <p>
+            <strong>Quotas Available:</strong> {activity.quotas_available}
+          </p>
           <button
             className="btn btn-dark mt-3"
             onClick={() => navigate(`/users/inscription/${activity.id}`)}

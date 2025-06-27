@@ -26,4 +26,5 @@ func mapUrls() {
 	router.POST("/activity", controllers.VerifyAdminToken, controllers.CreateActivity)          //crea una actividad
 	router.DELETE("/activity/:id", controllers.VerifyAdminToken, controllers.DeleteActivity)
 	router.PUT("/activity/:id", controllers.VerifyAdminToken, controllers.ModifyActivity)
+	router.GET("/users/admin", controllers.VerifyAdminToken)
 }

@@ -2,6 +2,49 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style_activities.css";
 
+function IsAdmin() {
+  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const token = document.cookie
+
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
+
+  fetch(`http://localhost:8080/users/admin`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+    },
+  })
+    .then((res) => {
+
+      if (res.status === 200) {
+        setIsAdmin(true);
+      }
+    })
+    .catch((err) => {
+      console.error("Error checking admin status:", err);
+      return false;
+    })
+
+
+  if (!isAdmin) {
+    return null;
+  }
+  return (
+
+    <div>
+      <button
+        className="admin-view"
+        onClick={() => navigate("/users/admin")}
+      >
+        Admin View
+      </button>
+    </div>
+  )
+}
+
 function SaludoUsuario() {
   const userName = localStorage.getItem("userName");
   const userSurname = localStorage.getItem("surname");
@@ -29,8 +72,6 @@ const Activities = () => {
 
     e.preventDefault();
     if (searchKey && searchValue) {
-
-
 
       fetch(
         `http://localhost:8080/activities?${searchKey}=${encodeURIComponent(
@@ -76,17 +117,25 @@ const Activities = () => {
       return;
     }
 
-
-
     fetch("http://localhost:8080/activities", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          alert("You are not authenticated. Please log in.");
+          navigate("/login");
+          throw new Error("Unauthorized");
+        }
+        return res.json();
+      })
       .then((data) => setActivities(data))
       .catch((err) => console.error("Error fetching activities:", err));
+
+
+
   }, []);
 
   return (
@@ -132,8 +181,9 @@ const Activities = () => {
       </form>
       <div className="container">
         <SaludoUsuario />
+        <IsAdmin />
         <div className="row row-cols-1 row-cols-2 row-cols-3 g-6">
-          {activities.map((activity) => (
+          {activities && activities.length > 0 && activities.map((activity) => (
             <div className="col" key={activity.id}>
               <div className="card-activity">
                 <img src={activity.photo} alt="Actividad" />
@@ -149,7 +199,8 @@ const Activities = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+          }
         </div>
       </div>
     </div>

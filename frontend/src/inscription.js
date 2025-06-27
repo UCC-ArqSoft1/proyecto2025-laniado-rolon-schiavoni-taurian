@@ -37,9 +37,9 @@ const Inscription = () => {
             throw new Error("Unauthorized");
           }
           if (response.status === 403) {
-            alert("Ya estás inscrito en esta actividad.");
+            alert("No es posible inscribirse.");
             navigate("/activities");
-            throw new Error("User already inscribed");
+            throw new Error("User already inscribed or no available quotas");
           }
           if (!response.ok) throw new Error("Error en la inscripción");
           return response.json();

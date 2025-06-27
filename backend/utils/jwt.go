@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -94,7 +93,6 @@ func ValidateAdminJWT(tokenString string) error {
 
 	// check if the token is valid and cast to CustomClaims
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
-		log.Println("Token is valid")
 		// check expiration
 		if claims.ExpiresAt != nil && claims.ExpiresAt.Before(time.Now()) {
 			return fmt.Errorf("token expired at %v", claims.ExpiresAt.Time)
