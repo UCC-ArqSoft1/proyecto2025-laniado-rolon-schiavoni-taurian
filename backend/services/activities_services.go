@@ -3,13 +3,10 @@ package services
 import (
 	activityClient "backend/clients/activity"
 	"backend/dto"
-	"backend/model"
 )
 
 func GetActivityByID(id int) (dto.ActivityDto, error) {
-	var activity model.ActivityModel
-	var err error
-	activity, err = activityClient.GetActivityByID(id)
+	activity, err := activityClient.GetActivityByID(id)
 	var activityDto dto.ActivityDto
 	var insDto dto.Inscriptions
 
@@ -38,11 +35,9 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 }
 
 func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (dto.ActivitiesDto, error) {
-	var activities model.Activities
 	var activitiesDto dto.ActivitiesDto
-	var err error
 
-	activities, err = activityClient.GetFilteredActivities(category, name, description, schedule, professor_name)
+	activities, err := activityClient.GetFilteredActivities(category, name, description, schedule, professor_name)
 
 	for _, activity := range activities {
 		var insDto dto.Inscriptions
