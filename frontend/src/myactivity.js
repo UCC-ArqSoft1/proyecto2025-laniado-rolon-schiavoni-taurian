@@ -2,14 +2,25 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./style_activities.css";
 
+
 const MyActivity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activity, setActivity] = useState(null);
-  const userID = localStorage.getItem("userID");
+
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
 
   useEffect(() => {
-    fetch(`http://localhost:8080/activities/${id}`)
+    fetch(`http://localhost:8080/activities/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setActivity(data));
   }, [id]);
@@ -20,7 +31,7 @@ const MyActivity = () => {
     <div className="container my-5">
       <button
         className="volver-btn"
-        onClick={() => navigate(`/users/${userID}/activities`)}
+        onClick={() => navigate(`/users/activities`)}
       >
         Go back
       </button>
@@ -38,7 +49,8 @@ const MyActivity = () => {
             <strong>Professor:</strong> {activity.profesor_name}
           </p>
           <p>
-            <strong>Schedule:</strong> {activity.schedules}
+            <strong>Day:</strong> {activity.day}
+            <strong>Start Hour:</strong> {activity.hour_start}
           </p>
         </div>
       </div>

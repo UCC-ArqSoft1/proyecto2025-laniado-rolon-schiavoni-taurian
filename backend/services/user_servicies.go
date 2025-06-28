@@ -8,30 +8,29 @@ import (
 	"log"
 )
 
-func Login(username string, password string) (int, string, string, string, error) {
+func Login(username string, password string) (string, string, string, error) {
 	userModel, err := userCLient.GetUserByUsername(username)
 	if err != nil {
 		log.Println("Error al obtener el usuario por username")
-		return 0, "", "", "", fmt.Errorf("failed to get user by user: %w", err)
+		return "", "", "", fmt.Errorf("failed to get user by user: %w", err)
 
 	}
 	if utils.HashSHA256(password) != userModel.PasswordHash {
 		log.Println("Error al obtener el usuario por password")
-		log.Println("Password: ", userModel.PasswordHash)
-		return 0, "", "", "", fmt.Errorf("invalid password")
+		return "", "", "", fmt.Errorf("invalid password")
 
 	}
 
-	token, err := utils.GenerateJWT(userModel.ID)
+	token, err := utils.GenerateJWT(userModel.ID, userModel.IsAdmin)
 	if err != nil {
 		log.Println("Error al generar el token")
-		return 0, "", "", "", fmt.Errorf("failed to generate token: %w", err)
+		return "", "", "", fmt.Errorf("failed to generate token: %w", err)
 
 	}
 
 	name := userModel.FirstName
 	surname := userModel.LastName
-	return userModel.ID, token, name, surname, nil
+	return token, name, surname, nil
 }
 
 func GetUserByID(id int) (dto.UserDto, error) {
@@ -74,10 +73,29 @@ func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 			ProfesorName: act.ProfesorName,
 			Description:  act.Description,
 			Category:     act.Category,
-			Schedules:    act.Schedule,
+			Day:          act.Day,
+			HourStart:    act.HourStart,
 			Active:       act.Active,
 			Photo:        act.Photo,
 		})
 	}
 	return actDto, nil
+}
+
+func VerifyToken(token string) error {
+	err := utils.ValidateJWT(token)
+	if err != nil {
+		log.Println("Error al verificar el token")
+		return fmt.Errorf("failed to verify token: %w", err)
+	}
+	return nil
+}
+
+func VerifyAdminToken(token string) error {
+	err := utils.ValidateAdminJWT(token)
+	if err != nil {
+		log.Println("Error al verificar el token de admin")
+		return fmt.Errorf("failed to verify admin token: %w", err)
+	}
+	return nil
 }

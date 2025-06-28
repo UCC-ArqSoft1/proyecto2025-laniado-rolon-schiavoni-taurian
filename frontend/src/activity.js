@@ -1,14 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./style_activities.css";
-
 
 function SaludoUsuario() {
   const userName = localStorage.getItem("userName");
   const userSurname = localStorage.getItem("surname");
   return (
     <div>
-      <h2 className="user-welcome">Hello {userName} {userSurname}!</h2>
+      <h2 className="user-welcome">
+        Hello {userName} {userSurname}!
+      </h2>
     </div>
   );
 }
@@ -17,10 +18,31 @@ const Activity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activity, setActivity] = useState(null);
-  const userID = localStorage.getItem("userID");
+  const hasRun = useRef(false);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/activities/${id}`)
+    if (hasRun.current) return;
+    hasRun.current = true;
+
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+
+    if (!token) {
+      alert("You are not authenticated. Please log in.");
+      navigate("/login");
+      return;
+    }
+
+
+    fetch(`http://localhost:8080/activities/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+      },
+    })
       .then((res) => res.json())
       .then((data) => setActivity(data));
   }, [id]);
@@ -47,7 +69,13 @@ const Activity = () => {
             <strong>Professor:</strong> {activity.profesor_name}
           </p>
           <p>
-            <strong>Schedule:</strong> {activity.schedules}
+            <strong>Day:</strong> {activity.day}
+          </p>
+          <p>
+            <strong>Start Hour:</strong> {activity.hour_start}
+          </p>
+          <p>
+            <strong>Quotas Available:</strong> {activity.quotas_available}
           </p>
           <button
             className="btn btn-dark mt-3"

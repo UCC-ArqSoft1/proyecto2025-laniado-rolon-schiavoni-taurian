@@ -1,5 +1,4 @@
-// src/Login.js
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style_login.css";  // Asegúrate de que este archivo CSS exista
 
@@ -28,7 +27,6 @@ const Login = () => {
 
       const data = await response.json();
       document.cookie = `token=${data.token}; path=/; SameSite=Strict`;
-      localStorage.setItem("userID", data.user_id);
       localStorage.setItem("userName", data.name);
       localStorage.setItem("surname", data.surname);
       navigate("/activities");

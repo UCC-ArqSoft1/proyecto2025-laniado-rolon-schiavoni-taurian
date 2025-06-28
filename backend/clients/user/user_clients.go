@@ -11,10 +11,9 @@ var Db *gorm.DB
 
 func GetUserByUsername(username string) (model.UserModel, error) {
 	var user model.UserModel
-	// Es equivalente a hacer un select * from users where username = username
-	txn := Db.First(&user, "email = ?", username)
-	if txn.Error != nil {
-		return model.UserModel{}, fmt.Errorf("failed to get user by username: %w", txn.Error)
+	query := Db.First(&user, "email = ?", username)
+	if query.Error != nil {
+		return model.UserModel{}, fmt.Errorf("failed to get user by username: %w", query.Error)
 	}
 
 	return user, nil
@@ -24,9 +23,9 @@ func GetUserByUsername(username string) (model.UserModel, error) {
 func GetUserByID(id int) (model.UserModel, error) {
 	var user model.UserModel
 	// Es equivalente a hacer un select * from users where id = id
-	txn := Db.Where("id = ?", id).Preload("InscriptionsUser").First(&user)
-	if txn.Error != nil {
-		return model.UserModel{}, fmt.Errorf("failed to get user by id: %w", txn.Error)
+	query := Db.Where("id = ?", id).Preload("InscriptionsUser").First(&user)
+	if query.Error != nil {
+		return model.UserModel{}, fmt.Errorf("failed to get user by id: %w", query.Error)
 	}
 
 	if user.ID == 0 {

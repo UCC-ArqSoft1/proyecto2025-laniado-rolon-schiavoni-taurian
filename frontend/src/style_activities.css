@@ -181,7 +181,8 @@
 
 /* Estilos para el botón btn-dark del detalle de actividad */
 .btn-dark {
-  background-color: #e74c3c; /* Rojo */
+  background-color: #e74c3c;
+  /* Rojo */
   border-color: #e74c3c;
   color: white;
   padding: 0.75rem 1.5rem;
@@ -191,7 +192,8 @@
 }
 
 .btn-dark:hover {
-  background-color: #c0392b; /* Rojo más oscuro al hover */
+  background-color: #c0392b;
+  /* Rojo más oscuro al hover */
   border-color: #c0392b;
   color: white;
   transform: translateY(-1px);
@@ -222,6 +224,20 @@
   font-weight: bold;
 }
 
+.admin-view {
+  position: absolute;
+  top: 30px;
+  right: 300px;
+  z-index: 10;
+  padding: 10px 20px;
+  background: #db4f0e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .volver-btn {
   position: absolute;
   top: 30px;
@@ -237,51 +253,51 @@
 }
 
 .search-navbar {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin-bottom: 2rem;
-    margin-top: 300px;
-    background: #fff7f2;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    top: 20px;
-    width: 70vh;
-    z-index: 10;
-    position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 2rem;
+  margin-top: 300px;
+  background: #fff7f2;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  top: 20px;
+  width: 70vh;
+  z-index: 10;
+  position: relative;
 }
 
 .search-select {
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    background: white;
-    cursor: pointer;
-    width: 100px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  width: 100px;
 }
 
 .search-input {
-    flex: 1;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    margin: 0 1rem;
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin: 0 1rem;
 }
 
 .search-btn {
-    background: #db4f0e;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 0.5rem 1.5rem;
-    transition: background 0.2s;
-    min-width: 100px;
+  background: #db4f0e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  transition: background 0.2s;
+  min-width: 100px;
 }
 
 .search-btn:hover {
-    background: #b93e09;
+  background: #b93e09;
 }
