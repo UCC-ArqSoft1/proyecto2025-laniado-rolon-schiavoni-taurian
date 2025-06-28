@@ -130,13 +130,15 @@ const Admin = () => {
     }, []);
 
     return (
-        <div>
-            <button
-                className="my-activities-btn"
-                onClick={() => navigate(`/users/activities`)}
-            >
-                My Activities
-            </button>
+
+        <div className="top-buttons">
+  <button className="volver-btn" onClick={() => navigate(`/activities`)}>
+    Go back
+  </button>
+  <button className="crear-btn" onClick={() => navigate(`/createactivity`)}>
+    Create Activity
+  </button>
+        
             <header className="header"></header>
             <form className="search-navbar" onSubmit={handleSearch}>
                 <select
@@ -183,9 +185,9 @@ const Admin = () => {
                                     <p className="card-activity-text">{activity.description}</p>
                                     <button
                                         className="btn btn-outline-dark card-activity-btn mt-auto"
-                                        onClick={() => navigate(`/activities/${activity.id}`)}
+                                        onClick={() => navigate(`/activityadmin/${activity.id}`)}
                                     >
-                                        View details
+                                        Modificar
                                     </button>
                                 </div>
                             </div>
@@ -194,6 +196,7 @@ const Admin = () => {
                 </div>
             </div>
         </div>
+    
     );
 };
 
