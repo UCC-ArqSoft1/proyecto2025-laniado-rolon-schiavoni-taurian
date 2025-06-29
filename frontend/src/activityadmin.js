@@ -78,10 +78,40 @@ const Activity = () => {
             <strong>Quotas Available:</strong> {activity.quotas_available}
           </p>
           <button
+  className="btn btn-danger mt-3"
+  onClick={() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    if (window.confirm("¿Estás seguro de que deseas eliminar esta actividad?")) {
+      fetch(`http://localhost:8080/activity/${activity.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            alert("Actividad eliminada con éxito");
+            navigate("/users/admin");
+          } else {
+            alert("Error al eliminar la actividad");
+          }
+        })
+        .catch(() => alert("Error al eliminar la actividad"));
+    }
+  }}
+>
+  Eliminar
+</button>
+        <button
             className="btn btn-dark mt-3"
-            onClick={() => navigate(`/users/inscription/${activity.id}`)}
+            onClick={() => navigate(`/editactivity/${activity.id}`)}
           >
-            Join Activity
+            Editar
           </button>
         </div>
       </div>

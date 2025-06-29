@@ -71,7 +71,8 @@ func GetUserActivities(id int) (dto.ActivitiesDto, error) {
 			ProfesorName: act.ProfesorName,
 			Description:  act.Description,
 			Category:     act.Category,
-			Schedules:    act.Schedule,
+			Day:          act.Day,
+			HourStart:    act.HourStart,
 			Active:       act.Active,
 			Photo:        act.Photo,
 		})
@@ -95,4 +96,13 @@ func VerifyAdmin(token string) (bool, error) {
 	}
 
 	return claims.IsAdmin, nil
+}
+
+func VerifyAdminToken(token string) error {
+	err := utils.ValidateAdminJWT(token)
+	if err != nil {
+		log.Println("Error al verificar el token de admin")
+		return fmt.Errorf("failed to verify admin token: %w", err)
+	}
+	return nil
 }

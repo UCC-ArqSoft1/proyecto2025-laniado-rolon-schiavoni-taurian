@@ -4,12 +4,11 @@ import (
 	activityClient "backend/clients/activity"
 	"backend/dto"
 	"backend/model"
+	"log"
 )
 
 func GetActivityByID(id int) (dto.ActivityDto, error) {
-	var activity model.ActivityModel
-	var err error
-	activity, err = activityClient.GetActivityByID(id)
+	activity, err := activityClient.GetActivityByID(id)
 	var activityDto dto.ActivityDto
 	var insDto dto.Inscriptions
 
@@ -30,7 +29,9 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 	activityDto.Description = activity.Description
 	activityDto.ProfesorName = activity.ProfesorName
 	activityDto.Quotas = activity.Quotas
-	activityDto.Schedules = activity.Schedule
+	activityDto.QuotasAvailable = activity.Quotas - len(activity.InscriptionsActivity)
+	activityDto.Day = activity.Day
+	activityDto.HourStart = activity.HourStart
 	activityDto.InscriptionsActivity = insDto
 	activityDto.Active = activity.Active
 	activityDto.Photo = activity.Photo
@@ -38,11 +39,9 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 }
 
 func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (dto.ActivitiesDto, error) {
-	var activities model.Activities
 	var activitiesDto dto.ActivitiesDto
-	var err error
 
-	activities, err = activityClient.GetFilteredActivities(category, name, description, schedule, professor_name)
+	activities, err := activityClient.GetFilteredActivities(category, name, description, schedule, professor_name)
 
 	for _, activity := range activities {
 		var insDto dto.Inscriptions
@@ -60,7 +59,9 @@ func GetFilteredActivities(category string, name string, description string, sch
 			Description:          activity.Description,
 			ProfesorName:         activity.ProfesorName,
 			Quotas:               activity.Quotas,
-			Schedules:            activity.Schedule,
+			QuotasAvailable:      activity.Quotas - len(activity.InscriptionsActivity),
+			Day:                  activity.Day,
+			HourStart:            activity.HourStart,
 			InscriptionsActivity: insDto,
 			Active:               activity.Active,
 			Photo:                activity.Photo,
@@ -69,4 +70,59 @@ func GetFilteredActivities(category string, name string, description string, sch
 	}
 
 	return activitiesDto, err
+}
+
+func CreateActivity(activity dto.ActivityRequestDto) error {
+	activityModel := model.ActivityModel{
+		Category:     activity.Category,
+		Name:         activity.Name,
+		Description:  activity.Description,
+		ProfesorName: activity.ProfesorName,
+		Quotas:       activity.Quotas,
+		Day:          activity.Day,
+		HourStart:    activity.HourStart,
+		Active:       activity.Active,
+		Photo:        activity.Photo,
+	}
+
+	_, err := activityClient.CreateActivity(activityModel)
+
+	if err != nil {
+		log.Printf("Error creating activity: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func ModifyActivity(activity dto.ActivityDto) error {
+	activityModel := model.ActivityModel{
+		ID:           activity.ID,
+		Category:     activity.Category,
+		Name:         activity.Name,
+		Description:  activity.Description,
+		ProfesorName: activity.ProfesorName,
+		Quotas:       activity.Quotas,
+		Day:          activity.Day,
+		HourStart:    activity.HourStart,
+		Active:       activity.Active,
+		Photo:        activity.Photo,
+	}
+
+	err := activityClient.ModifyActivity(activityModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteActivity(id int) error {
+	err := activityClient.DeleteActivity(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
