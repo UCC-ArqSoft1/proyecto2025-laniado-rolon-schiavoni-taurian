@@ -2,7 +2,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./style_activities.css";
 
-
 const MyActivity = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -23,7 +22,7 @@ const MyActivity = () => {
     })
       .then((res) => res.json())
       .then((data) => setActivity(data));
-  }, [id]);
+  }, [id, token]);
 
   if (!activity) return <p className="text-center mt-5">Cargando...</p>;
 
@@ -50,6 +49,8 @@ const MyActivity = () => {
           </p>
           <p>
             <strong>Day:</strong> {activity.day}
+          </p>
+          <p>
             <strong>Start Hour:</strong> {activity.hour_start}
           </p>
         </div>

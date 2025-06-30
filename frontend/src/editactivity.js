@@ -12,7 +12,7 @@ const EditActivity = () => {
     day: "",
     hour_start: "",
     active: true,
-    photo: ""
+    photo: "",
   });
   const [original, setOriginal] = useState({});
   const navigate = useNavigate();
@@ -77,7 +77,10 @@ const EditActivity = () => {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
-    const hour_start = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:${second.padStart(2, "0")}`;
+    const hour_start = `${hour.padStart(2, "0")}:${minute.padStart(
+      2,
+      "0"
+    )}:${second.padStart(2, "0")}`;
 
     const formToSend = {};
     Object.keys(form).forEach((key) => {
@@ -109,7 +112,7 @@ const EditActivity = () => {
           alert("No estás autenticado. Por favor, inicia sesión.");
           navigate("/login");
         } else {
-          alert(`Error: ${res.status}. No se pudo crear la actividad.`);
+          alert(`Error: ${res.status}. No se pudo modificar la actividad.`);
         }
       })
       .catch(() => alert("Error al editar la actividad"));
@@ -122,29 +125,86 @@ const EditActivity = () => {
       </button>
       <form onSubmit={handleSubmit} className="edit-activity-form">
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="name">Name:</label>
-          <input id="name" name="name" className="edit-activity-input" placeholder="Name" value={form.name} onChange={handleChange} />
+          <label className="edit-activity-label" htmlFor="name">
+            Name:
+          </label>
+          <input
+            id="name"
+            name="name"
+            className="edit-activity-input"
+            placeholder="Name"
+            value={form.name}
+            onChange={handleChange}
+          />
         </div>
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="category">Category:</label>
-          <input id="category" name="category" className="edit-activity-input" placeholder="Category" value={form.category} onChange={handleChange} />
+          <label className="edit-activity-label" htmlFor="category">
+            Category:
+          </label>
+          <input
+            id="category"
+            name="category"
+            className="edit-activity-input"
+            placeholder="Category"
+            value={form.category}
+            onChange={handleChange}
+          />
         </div>
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="description">Description:</label>
-          <input id="description" name="description" className="edit-activity-input" placeholder="Description" value={form.description} onChange={handleChange} />
+          <label className="edit-activity-label" htmlFor="description">
+            Description:
+          </label>
+          <input
+            id="description"
+            name="description"
+            className="edit-activity-input"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+          />
         </div>
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="profesor_name">Professor Name:</label>
-          <input id="profesor_name" name="profesor_name" className="edit-activity-input" placeholder="Professor Name" value={form.profesor_name} onChange={handleChange} />
+          <label className="edit-activity-label" htmlFor="profesor_name">
+            Professor Name:
+          </label>
+          <input
+            id="profesor_name"
+            name="profesor_name"
+            className="edit-activity-input"
+            placeholder="Professor Name"
+            value={form.profesor_name}
+            onChange={handleChange}
+          />
         </div>
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="quotas">Quotas:</label>
-          <input id="quotas" name="quotas" type="number" className="edit-activity-input" placeholder="Quotas" value={form.quotas} onChange={handleChange} />
+          <label className="edit-activity-label" htmlFor="quotas">
+            Quotas:
+          </label>
+          <input
+            id="quotas"
+            name="quotas"
+            type="number"
+            className="edit-activity-input"
+            placeholder="Quotas"
+            value={form.quotas}
+            onChange={handleChange}
+          />
         </div>
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="day">Day:</label>
-          <select id="day" name="day" className="edit-activity-select" value={form.day} onChange={handleChange} required>
-            <option value="" disabled>Select Day</option>
+          <label className="edit-activity-label" htmlFor="day">
+            Day:
+          </label>
+          <select
+            id="day"
+            name="day"
+            className="edit-activity-select"
+            value={form.day}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>
+              Select Day
+            </option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
             <option value="Wednesday">Wednesday</option>
@@ -157,18 +217,60 @@ const EditActivity = () => {
         <div className="edit-activity-row">
           <label className="edit-activity-label">Hour Start:</label>
           <div className="edit-activity-hour-group">
-            <input name="hour" type="text" placeholder="HH" value={hour} onChange={handleHourChange} maxLength={2} className="edit-activity-hour-input" />
+            <input
+              name="hour"
+              type="text"
+              placeholder="HH"
+              value={hour}
+              onChange={handleHourChange}
+              maxLength={2}
+              className="edit-activity-hour-input"
+            />
             :
-            <input name="minute" type="text" placeholder="MM" value={minute} onChange={handleHourChange} maxLength={2} className="edit-activity-hour-input" />
+            <input
+              name="minute"
+              type="text"
+              placeholder="MM"
+              value={minute}
+              onChange={handleHourChange}
+              maxLength={2}
+              className="edit-activity-hour-input"
+            />
             :
-            <input name="second" type="text" placeholder="SS" value={second} onChange={handleHourChange} maxLength={2} className="edit-activity-hour-input" />
+            <input
+              name="second"
+              type="text"
+              placeholder="SS"
+              value={second}
+              onChange={handleHourChange}
+              maxLength={2}
+              className="edit-activity-hour-input"
+            />
           </div>
         </div>
         <div className="edit-activity-row">
-          <label className="edit-activity-label" htmlFor="photo">Photo URL:</label>
-          <input id="photo" name="photo" className="edit-activity-input" placeholder="Photo URL" value={form.photo} onChange={handleChange} />
+          <label className="edit-activity-label" htmlFor="photo">
+            Photo URL:
+          </label>
+          <input
+            id="photo"
+            name="photo"
+            className="edit-activity-input"
+            placeholder="Photo URL"
+            value={form.photo}
+            onChange={handleChange}
+          />
         </div>
-        <button type="submit" className="edit-activity-input" style={{ fontWeight: "bold", background: "#db4f0e", color: "#fff", cursor: "pointer" }}>
+        <button
+          type="submit"
+          className="edit-activity-input"
+          style={{
+            fontWeight: "bold",
+            background: "#db4f0e",
+            color: "#fff",
+            cursor: "pointer",
+          }}
+        >
           Editar Actividad
         </button>
       </form>

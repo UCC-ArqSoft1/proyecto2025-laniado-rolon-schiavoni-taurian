@@ -29,13 +29,11 @@ const Activity = () => {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
-
     if (!token) {
       alert("You are not authenticated. Please log in.");
       navigate("/login");
       return;
     }
-
 
     fetch(`http://localhost:8080/activities/${id}`, {
       headers: {
@@ -45,7 +43,7 @@ const Activity = () => {
     })
       .then((res) => res.json())
       .then((data) => setActivity(data));
-  }, [id]);
+  }, [id, navigate]);
 
   if (!activity) return <p className="text-center mt-5">Loading...</p>;
 
@@ -78,36 +76,45 @@ const Activity = () => {
             <strong>Quotas Available:</strong> {activity.quotas_available}
           </p>
           <button
-  className="btn btn-danger mt-3"
-  onClick={() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+            className="btn btn-danger mt-3"
+            onClick={() => {
+              const token = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("token="))
+                ?.split("=")[1];
 
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta actividad?")) {
-      fetch(`http://localhost:8080/activity/${activity.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            alert("Actividad eliminada con éxito");
-            navigate("/users/admin");
-          } else {
-            alert("Error al eliminar la actividad");
-          }
-        })
-        .catch(() => alert("Error al eliminar la actividad"));
-    }
-  }}
->
-  Eliminar
-</button>
-        <button
+              if (
+                window.confirm(
+                  "¿Estás seguro de que deseas eliminar esta actividad?"
+                )
+              ) {
+                fetch(`http://localhost:8080/activity/${activity.id}`, {
+                  method: "DELETE",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `${token}`,
+                  },
+                })
+                  .then((res) => {
+                    if (res.ok) {
+                      alert("Actividad eliminada con éxito");
+                      navigate("/users/admin");
+                    } else if (res.status === 401 || res.status === 403) {
+                      alert("No estás autenticado. Por favor, inicia sesión.");
+                      navigate("/login");
+                    } else {
+                      alert(
+                        `Error: ${res.status}. No se pudo eliminar la actividad.`
+                      );
+                    }
+                  })
+                  .catch(() => alert("Error al eliminar la actividad"));
+              }
+            }}
+          >
+            Eliminar
+          </button>
+          <button
             className="btn btn-dark mt-3"
             onClick={() => navigate(`/editactivity/${activity.id}`)}
           >

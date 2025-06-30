@@ -18,7 +18,6 @@ function IsAdmin() {
     },
   })
     .then((res) => {
-
       if (res.status === 200) {
         setIsAdmin(true);
       }
@@ -26,23 +25,18 @@ function IsAdmin() {
     .catch((err) => {
       console.error("Error checking admin status:", err);
       return false;
-    })
-
+    });
 
   if (!isAdmin) {
     return null;
   }
   return (
-
     <div>
-      <button
-        className="admin-view"
-        onClick={() => navigate("/users/admin")}
-      >
+      <button className="admin-view" onClick={() => navigate("/users/admin")}>
         Admin View
       </button>
     </div>
-  )
+  );
 }
 
 function SaludoUsuario() {
@@ -50,7 +44,9 @@ function SaludoUsuario() {
   const userSurname = localStorage.getItem("surname");
   return (
     <div>
-      <h2 className="user-welcome">Hello {userName} {userSurname}!</h2>
+      <h2 className="user-welcome">
+        Hello {userName} {userSurname}!
+      </h2>
     </div>
   );
 }
@@ -63,25 +59,23 @@ const Activities = () => {
   const hasRun = useRef(false);
 
   const handleSearch = (e) => {
-
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
-
     e.preventDefault();
     if (searchKey && searchValue) {
-
       fetch(
         `http://localhost:8080/activities?${searchKey}=${encodeURIComponent(
           searchValue
-        )}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
-        },
-      }
+        )}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+          },
+        }
       )
         .then((res) => res.json())
         .then((data) => setActivities(data))
@@ -92,7 +86,6 @@ const Activities = () => {
           "Content-Type": "application/json",
           Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
         },
-
       })
         .then((res) => res.json())
         .then((data) => setActivities(data))
@@ -109,7 +102,6 @@ const Activities = () => {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
 
     if (!token) {
       alert("You are not authenticated. Please log in.");
@@ -133,10 +125,7 @@ const Activities = () => {
       })
       .then((data) => setActivities(data))
       .catch((err) => console.error("Error fetching activities:", err));
-
-
-
-  }, []);
+  }, [navigate]);
 
   return (
     <div>
@@ -156,7 +145,6 @@ const Activities = () => {
           }}
           className="search-select"
           required
-
         >
           <option value="all">All</option>
           <option value="name">Name</option>
@@ -173,7 +161,6 @@ const Activities = () => {
           disabled={searchKey === "all"}
           onChange={(e) => setSearchValue(e.target.value)}
           className="search-input"
-
         />
         <button type="submit" className="search-btn">
           Search
@@ -183,24 +170,25 @@ const Activities = () => {
         <SaludoUsuario />
         <IsAdmin />
         <div className="row row-cols-1 row-cols-2 row-cols-3 g-6">
-          {activities && activities.length > 0 && activities.map((activity) => (
-            <div className="col" key={activity.id}>
-              <div className="card-activity">
-                <img src={activity.photo} alt="Actividad" />
-                <div className="card-activity-body d-flex flex-column">
-                  <h5 className="card-activity-title">{activity.name}</h5>
-                  <p className="card-activity-text">{activity.description}</p>
-                  <button
-                    className="btn btn-outline-dark card-activity-btn mt-auto"
-                    onClick={() => navigate(`/activities/${activity.id}`)}
-                  >
-                    View details
-                  </button>
+          {activities &&
+            activities.length > 0 &&
+            activities.map((activity) => (
+              <div className="col" key={activity.id}>
+                <div className="card-activity">
+                  <img src={activity.photo} alt="Actividad" />
+                  <div className="card-activity-body d-flex flex-column">
+                    <h5 className="card-activity-title">{activity.name}</h5>
+                    <p className="card-activity-text">{activity.description}</p>
+                    <button
+                      className="btn btn-outline-dark card-activity-btn mt-auto"
+                      onClick={() => navigate(`/activities/${activity.id}`)}
+                    >
+                      View details
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-          }
+            ))}
         </div>
       </div>
     </div>

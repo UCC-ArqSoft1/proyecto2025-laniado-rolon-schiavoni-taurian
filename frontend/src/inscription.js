@@ -34,28 +34,28 @@ const Inscription = () => {
           if (response.status === 401) {
             alert("No estás autenticado. Por favor, inicia sesión.");
             navigate("/login");
-            throw new Error("Unauthorized");
+            return null;
           }
           if (response.status === 403) {
             alert("No es posible inscribirse.");
             navigate("/activities");
-            throw new Error("User already inscribed or no available quotas");
+            return null;
           }
           if (!response.ok) throw new Error("Error en la inscripción");
           return response.json();
         })
-        .then(() => {
-          alert("Inscripción exitosa!");
-          setHasSubmitted(true);
-          navigate("/activities");
+        .then((data) => {
+          if (data) {
+            alert("Inscripción exitosa!");
+            setHasSubmitted(true);
+            navigate("/activities");
+          }
         })
         .catch((err) => {
           console.error(err);
-          if (err.message !== "Unauthorized" && err.message !== "User already inscribed") {
-            alert("Hubo un error al inscribirse.");
-          }
+          alert("Hubo un error al inscribirse.");
         });
     }
   }, [activityId, hasSubmitted, navigate, userID]);
-}
+};
 export default Inscription;

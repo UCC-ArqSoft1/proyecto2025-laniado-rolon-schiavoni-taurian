@@ -29,13 +29,11 @@ const Activity = () => {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
-
     if (!token) {
       alert("You are not authenticated. Please log in.");
       navigate("/login");
       return;
     }
-
 
     fetch(`http://localhost:8080/activities/${id}`, {
       headers: {
@@ -45,7 +43,7 @@ const Activity = () => {
     })
       .then((res) => res.json())
       .then((data) => setActivity(data));
-  }, [id]);
+  }, [id, navigate]);
 
   if (!activity) return <p className="text-center mt-5">Loading...</p>;
 
