@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin" //importo un link
 )
@@ -54,7 +55,11 @@ func CreateActivity(ctx *gin.Context) {
 		})
 		return
 	}
-	//llamo al servicio para crear la actividad
+
+	if !VerifyActivity(activity, ctx) {
+		return //si no verifico la actividad, no sigo
+	}
+
 	err := services.CreateActivity(activity)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error al crear la actividad"})
@@ -84,6 +89,10 @@ func ModifyActivity(ctx *gin.Context) {
 	}
 	activity.ID = activityIDInt
 
+	if !VerifyActivity(ToRequestDto(activity), ctx) {
+		return //si no verifico la actividad, no sigo
+	}
+
 	err2 := services.ModifyActivity(activity) //le paso el id de la url y los datos de la actividad
 	if err2 != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Actividad no encontrada"})
@@ -106,4 +115,70 @@ func DeleteActivity(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "Actividad eliminada con exito"})
+}
+
+// Función para convertir ActivityDto a ActivityRequestDto
+func ToRequestDto(a dto.ActivityDto) dto.ActivityRequestDto {
+	return dto.ActivityRequestDto{
+		Category:     a.Category,
+		Name:         a.Name,
+		Description:  a.Description,
+		ProfesorName: a.ProfesorName,
+		Quotas:       a.Quotas,
+		Day:          a.Day,
+		HourStart:    a.HourStart,
+		Active:       a.Active,
+		Photo:        a.Photo,
+	}
+}
+
+func VerifyActivity(activity dto.ActivityRequestDto, ctx1 *gin.Context) bool {
+
+	if activity.Name == "" || activity.Description == "" || activity.Category == "" ||
+		activity.ProfesorName == "" || activity.HourStart == "" || activity.Day == "" || activity.HourStart == "" || activity.Photo == "" {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Hay campos obligatorios vacíos"})
+		return false
+	}
+
+	//verificar que el nombre del profesor no tenga números
+	if strings.ContainsAny(activity.ProfesorName, "0123456789") {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "El nombre del profesor no puede contener números"})
+		return false
+	}
+
+	timeParts := strings.Split(activity.HourStart, ":")
+	if len(timeParts) != 3 {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Formato de hora inválido. Debe ser HH:MM:SS"})
+		return false
+	}
+
+	hours := timeParts[0]
+	minutes := timeParts[1]
+	seconds := timeParts[2]
+
+	// Validar que cada parte sea un número válido
+	hoursInt, err1 := strconv.Atoi(hours)
+	if err1 != nil || hoursInt < 0 || hoursInt > 23 {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Horas inválidas (0-23)"})
+		return false
+	}
+
+	minutesInt, err2 := strconv.Atoi(minutes)
+	if err2 != nil || minutesInt < 0 || minutesInt > 59 {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Minutos inválidos (0-59)"})
+		return false
+	}
+
+	secondsInt, err3 := strconv.Atoi(seconds)
+	if err3 != nil || secondsInt < 0 || secondsInt > 59 {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Segundos inválidos (0-59)"})
+		return false
+	}
+
+	if activity.Quotas <= 0 {
+		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Los cupos deben ser mayores a 0"})
+		return false
+	}
+
+	return true
 }

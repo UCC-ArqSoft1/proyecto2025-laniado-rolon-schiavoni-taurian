@@ -6,7 +6,6 @@ import (
 	userCLient "backend/clients/user"
 	"backend/model"
 	"fmt"
-	"os"
 
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
@@ -19,17 +18,20 @@ var (
 )
 
 func init() {
+	/*
+		host := os.Getenv("DB_HOST")     // ej. "db"
+		port := os.Getenv("DB_PORT")     // ej. "3306"
+		user := os.Getenv("DB_USER")     // ej. "appuser"
+		password := os.Getenv("DB_PASS") // ej. "apppass"
+		name := os.Getenv("DB_NAME")     // ej. "mi_app"
 
-	host := os.Getenv("DB_HOST")     // ej. "db"
-	port := os.Getenv("DB_PORT")     // ej. "3306"
-	user := os.Getenv("DB_USER")     // ej. "appuser"
-	password := os.Getenv("DB_PASS") // ej. "apppass"
-	name := os.Getenv("DB_NAME")     // ej. "mi_app"
+		dsn := fmt.Sprintf(
+			"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+			user, password, host, port, name,
+		)
+	*/
 
-	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		user, password, host, port, name,
-	)
+	dsn := "root:FranMySql1@@tcp(127.0.0.1:3306)/arqui_software?charset=utf8mb4&parseTime=True&loc=Local"
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Info("Connection Failed to Open")
