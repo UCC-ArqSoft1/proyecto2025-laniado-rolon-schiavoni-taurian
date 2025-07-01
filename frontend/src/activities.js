@@ -1,31 +1,37 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style_activities.css";
 
 function IsAdmin() {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const hasRun = useRef(false);
   const token = document.cookie
 
     .split("; ")
     .find((row) => row.startsWith("token="))
     ?.split("=")[1];
 
-  fetch(`http://localhost:8080/users/admin`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
-    },
-  })
-    .then((res) => {
-      if (res.status === 200) {
-        setIsAdmin(true);
-      }
+
+  useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+    fetch(`http://localhost:8080/users/admin`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
+      },
     })
-    .catch((err) => {
-      console.error("Error checking admin status:", err);
-      return false;
-    });
+      .then((res) => {
+        if (res.status === 200) {
+          setIsAdmin(true);
+        }
+      })
+      .catch((err) => {
+        console.error("Error checking admin status:", err);
+        return false;
+      });
+  }, [token]);
 
   if (!isAdmin) {
     return null;

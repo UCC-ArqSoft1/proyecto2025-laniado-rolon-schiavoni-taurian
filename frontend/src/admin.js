@@ -140,7 +140,7 @@ const Admin = () => {
           <option value="all">All</option>
           <option value="name">Name</option>
           <option value="category">Category</option>
-          <option value="professor_name">puto</option>
+          <option value="professor_name">Professor</option>
           <option value="day">Day</option>
           <option value="hour_start">Hour Start</option>
           <option value="description">Description</option>

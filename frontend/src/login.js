@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./style_login.css";  // Asegúrate de que este archivo CSS exista
 
 const Login = () => {
-  const [rightPanelActive, setRightPanelActive] = useState(false);
+  const [rightPanelActive] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
