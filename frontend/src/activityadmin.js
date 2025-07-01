@@ -41,7 +41,22 @@ const Activity = () => {
         Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          navigate("/login");
+          throw new Error("Unauthorized");
+        }
+        if (!res.ok) {
+          throw new Error("Failed to fetch activity");
+        }
+        return res.json().catch((err) => {
+          // ✅ AGREGAR manejo de errores
+          if (!err.message.includes("Unauthorized")) {
+            console.error("Error fetching activity:", err);
+          }
+        });
+      })
       .then((data) => setActivity(data));
   }, [id, navigate]);
 
@@ -82,7 +97,11 @@ const Activity = () => {
                 .split("; ")
                 .find((row) => row.startsWith("token="))
                 ?.split("=")[1];
-
+              if (!token) {
+                alert("No estás autenticado. Por favor, inicia sesión.");
+                navigate("/login");
+                return;
+              }
               if (
                 window.confirm(
                   "¿Estás seguro de que deseas eliminar esta actividad?"

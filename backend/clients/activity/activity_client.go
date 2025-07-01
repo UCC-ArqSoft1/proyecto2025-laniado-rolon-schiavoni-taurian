@@ -36,7 +36,7 @@ func GetActivityByID(id int) (model.ActivityModel, error) {
 	return activity, err //Devuelve un DAO (Data Access Object) de la actividad
 }
 
-func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (model.Activities, error) {
+func GetFilteredActivities(category string, name string, description string, day string, hour_start string, professor_name string) (model.Activities, error) {
 	var activities model.Activities
 	var err error
 
@@ -51,8 +51,11 @@ func GetFilteredActivities(category string, name string, description string, sch
 	if description != "" {
 		query = query.Where("description LIKE ?", "%"+description+"%")
 	}
-	if schedule != "" {
-		query = query.Where("schedule LIKE ?", "%"+schedule+"%")
+	if day != "" {
+		query = query.Where("day LIKE ?", "%"+day+"%")
+	}
+	if hour_start != "" {
+		query = query.Where("hour_start LIKE ?", "%"+hour_start+"%")
 	}
 	if professor_name != "" {
 		query = query.Where("profesor_name LIKE ?", "%"+professor_name+"%")

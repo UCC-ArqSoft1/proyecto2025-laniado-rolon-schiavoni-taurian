@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./editactivity.css";
 
@@ -20,12 +20,22 @@ const EditActivity = () => {
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
   const [second, setSecond] = useState("");
+  const hasRun = useRef(false);
 
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
+
+    if (!token) {
+      alert("You are not authenticated. Please log in.");
+      navigate("/login");
+      return;
+    }
 
     fetch(`http://localhost:8080/activities/${id}`, {
       headers: {
@@ -33,7 +43,18 @@ const EditActivity = () => {
         Authorization: `${token}`,
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        // ← AGREGAR validación de respuesta
+        if (res.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          navigate("/login");
+          throw new Error("Unauthorized");
+        }
+        if (!res.ok) {
+          throw new Error("Failed to fetch activity");
+        }
+        return res.json();
+      })
       .then((data) => {
         setOriginal(data);
 
@@ -55,8 +76,15 @@ const EditActivity = () => {
           setMinute(m || "");
           setSecond(s || "");
         }
+      })
+      .catch((err) => {
+        // ← AGREGAR manejo de errores
+        if (!err.message.includes("Unauthorized")) {
+          console.error("Error fetching activity:", err);
+          alert("Error loading activity data");
+        }
       });
-  }, [id]);
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -77,17 +105,32 @@ const EditActivity = () => {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
+    if (!token) {
+      alert("You are not authenticated. Please log in.");
+      navigate("/login");
+      return;
+    }
+
     const hour_start = `${hour.padStart(2, "0")}:${minute.padStart(
       2,
       "0"
     )}:${second.padStart(2, "0")}`;
 
-    const formToSend = {};
+    const formToSend = {
+      name: form.name || "",
+      category: form.category || "",
+      description: form.description || "",
+      profesor_name: form.profesor_name || "",
+      quotas: form.quotas ? Number(form.quotas) : 0,
+      day: form.day || "",
+      photo: form.photo || "",
+      active: form.active,
+      hour_start:
+        hour !== "" || minute !== "" || second !== "" ? hour_start : "",
+    };
     Object.keys(form).forEach((key) => {
       if (form[key] !== "" && form[key] !== null && form[key] !== undefined) {
         formToSend[key] = key === "quotas" ? Number(form[key]) : form[key];
-      } else if (original[key] !== undefined) {
-        formToSend[key] = original[key];
       }
     });
 
@@ -112,7 +155,9 @@ const EditActivity = () => {
           alert("No estás autenticado. Por favor, inicia sesión.");
           navigate("/login");
         } else {
-          alert(`Error: ${res.status}. No se pudo modificar la actividad.`);
+          res.json().then((data) => {
+            alert(`Error: ${data.error}. No se pudo crear la actividad.`);
+          });
         }
       })
       .catch(() => alert("Error al editar la actividad"));

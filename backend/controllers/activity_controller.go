@@ -32,10 +32,11 @@ func GetFilteredActivities(ctx *gin.Context) { //context contiene la info de la 
 	category := ctx.Query("category")
 	name := ctx.Query("name")
 	description := ctx.Query("description")
-	schedule := ctx.Query("schedule")
+	day := ctx.Query("day")
+	hour_start := ctx.Query("hour_start")
 	professor_name := ctx.Query("professor_name")
 
-	activities, err := services.GetFilteredActivities(category, name, description, schedule, professor_name)
+	activities, err := services.GetFilteredActivities(category, name, description, day, hour_start, professor_name)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "No hay actividades"})
 		return
@@ -135,7 +136,7 @@ func ToRequestDto(a dto.ActivityDto) dto.ActivityRequestDto {
 func VerifyActivity(activity dto.ActivityRequestDto, ctx1 *gin.Context) bool {
 
 	if activity.Name == "" || activity.Description == "" || activity.Category == "" ||
-		activity.ProfesorName == "" || activity.HourStart == "" || activity.Day == "" || activity.HourStart == "" || activity.Photo == "" {
+		activity.ProfesorName == "" || activity.Day == "" || activity.HourStart == "" || activity.Photo == "" {
 		ctx1.JSON(http.StatusBadRequest, gin.H{"error": "Hay campos obligatorios vacíos"})
 		return false
 	}

@@ -38,10 +38,10 @@ func GetActivityByID(id int) (dto.ActivityDto, error) {
 	return activityDto, err
 }
 
-func GetFilteredActivities(category string, name string, description string, schedule string, professor_name string) (dto.ActivitiesDto, error) {
+func GetFilteredActivities(category string, name string, description string, day string, hour_start string, professor_name string) (dto.ActivitiesDto, error) {
 	var activitiesDto dto.ActivitiesDto
 
-	activities, err := activityClient.GetFilteredActivities(category, name, description, schedule, professor_name)
+	activities, err := activityClient.GetFilteredActivities(category, name, description, day, hour_start, professor_name)
 
 	for _, activity := range activities {
 		var insDto dto.Inscriptions

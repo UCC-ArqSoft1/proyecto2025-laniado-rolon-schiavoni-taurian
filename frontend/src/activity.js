@@ -41,8 +41,23 @@ const Activity = () => {
         Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
       },
     })
-      .then((res) => res.json())
-      .then((data) => setActivity(data));
+      .then((res) => {
+        if (res.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          navigate("/login");
+          throw new Error("Unauthorized");
+        }
+        if (!res.ok) {
+          throw new Error("Failed to fetch activity");
+        }
+        return res.json();
+      })
+      .then((data) => setActivity(data))
+      .catch((err) => {
+        if (!err.message.includes("Unauthorized")) {
+          console.error("Error fetching activity:", err);
+        }
+      });
   }, [id, navigate]);
 
   if (!activity) return <p className="text-center mt-5">Loading...</p>;

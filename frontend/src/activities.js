@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style_activities.css";
 
@@ -11,7 +11,6 @@ function IsAdmin() {
     .split("; ")
     .find((row) => row.startsWith("token="))
     ?.split("=")[1];
-
 
   useEffect(() => {
     if (hasRun.current) return;
@@ -83,9 +82,23 @@ const Activities = () => {
           },
         }
       )
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 401) {
+            alert("Your session has expired. Please log in again.");
+            navigate("/login");
+            throw new Error("Unauthorized");
+          }
+          if (!res.ok) {
+            throw new Error("Failed to fetch activities");
+          }
+          return res.json();
+        })
         .then((data) => setActivities(data))
-        .catch((err) => console.error("Error fetching activities:", err));
+        .catch((err) => {
+          if (!err.message.includes("Unauthorized")) {
+            console.error("Error fetching activities:", err);
+          }
+        });
     } else if (searchKey === "all") {
       fetch("http://localhost:8080/activities", {
         headers: {
@@ -93,9 +106,23 @@ const Activities = () => {
           Authorization: `${token}`, // Este fragmento establece una cabecera HTTP
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 401) {
+            alert("Your session has expired. Please log in again.");
+            navigate("/login");
+            throw new Error("Unauthorized");
+          }
+          if (!res.ok) {
+            throw new Error("Failed to fetch activities");
+          }
+          return res.json();
+        })
         .then((data) => setActivities(data))
-        .catch((err) => console.error("Error fetching activities:", err));
+        .catch((err) => {
+          if (!err.message.includes("Unauthorized")) {
+            console.error("Error fetching activities:", err);
+          }
+        });
     }
     setSearchValue("");
   };
