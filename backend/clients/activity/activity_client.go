@@ -9,17 +9,6 @@ import (
 
 var Db *gorm.DB
 
-/*func CreateActivity(activity model.Activity) model.Activity {
-	result := Db.Create(&activity)
-
-	if result.Error != nil {
-		//TODO Manage Errors
-		log.Error("Error creating activity: ", result.Error)
-	}
-	log.Debug("Activity Created: ", activity.ID)
-	return activity
-}*/
-
 func GetActivityByID(id int) (model.ActivityModel, error) {
 	var activity model.ActivityModel
 	var err error

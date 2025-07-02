@@ -88,6 +88,9 @@ const Activities = () => {
             navigate("/login");
             throw new Error("Unauthorized");
           }
+          if (res.status === 404) {
+            alert("No activities found!");
+          }
           if (!res.ok) {
             throw new Error("Failed to fetch activities");
           }

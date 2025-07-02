@@ -20,18 +20,18 @@ var (
 
 func init() {
 
-	host := os.Getenv("DB_HOST")     // ej. "db"
-	port := os.Getenv("DB_PORT")     // ej. "3306"
-	user := os.Getenv("DB_USER")     // ej. "appuser"
-	password := os.Getenv("DB_PASS") // ej. "apppass"
-	name := os.Getenv("DB_NAME")     // ej. "mi_app"
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASS")
+	name := os.Getenv("DB_NAME")
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		user, password, host, port, name,
 	)
 
-	//dsn := "root:gabi12@tcp(127.0.0.1:3306)/arqui_software?charset=utf8mb4&parseTime=True&loc=Local"
+	//dsn := "root:FranMySql1@@tcp(127.0.0.1:3306)/arqui_software?charset=utf8mb4&parseTime=True&loc=Local"
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Info("Connection Failed to Open")
